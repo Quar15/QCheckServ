@@ -1,0 +1,217 @@
+:root{
+    --background-main: #222;
+    --text-main: #EEE;
+    --highlight: rgb(99, 255, 132);
+    --highlight-alt: rgba(99, 255, 132, 0.2);
+    --highlight-disabled: rgb(34, 85, 45);
+}
+
+body {
+    background-color: var(--background-main);
+    color: var(--text-main);
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    display: flex;
+    margin: 0;
+}
+
+nav {
+    min-width: 250px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 10;
+}
+
+nav .logo {
+    width: 128px;
+    height: 128px;
+    margin: 20px auto;
+}
+
+nav .menu {
+    display: flex;
+    flex-direction: column;
+}
+
+nav .menu a {
+    color: var(--text-main);
+    text-decoration: none;
+    padding: 30px 0 30px 30px;
+    margin: 5px 0;
+    text-align: center;
+    border-top: 1px solid var(--text-main);
+    border-bottom: 1px solid var(--text-main);
+    border-right: 1px solid var(--text-main);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+}
+
+nav .menu a:hover {
+    color: var(--highlight);
+}
+
+nav .menu a:hover, nav .menu a.active {
+    border-top: 1px solid var(--highlight);
+    border-bottom: 1px solid var(--highlight);
+    border-right: 1px solid var(--highlight);
+}
+
+nav .menu a.wip {
+    border-top: 1px solid var(--highlight-disabled);
+    border-bottom: 1px solid var(--highlight-disabled);
+    border-right: 1px solid var(--highlight-disabled);
+    color: var(--highlight-disabled);
+}
+
+nav .menu i {
+    font-size: 25px;
+    margin-right: 17px;
+}
+
+nav .menu a.active i {
+    color: var(--highlight);
+}
+
+nav .menu a .tag {
+    position: absolute;
+    right: -15px;
+    background-color: var(--highlight);
+    color: var(--background-main);
+    padding: 3px 5px;
+    border-radius: 3px;
+}
+
+.wrapper {
+    margin-left: 250px;
+}
+
+.wrapper .loading-overlay {
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: calc(100% - 250px);
+    z-index: 1;
+    background-color: var(--background-main);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading-overlay .bar {
+    width: 6px;
+    height: 60px;
+    background: white;
+    display: inline-block;
+    transform-origin: bottom;
+    animation: loading 2s ease-in-out infinite;
+}
+
+.loading-overlay .bar:nth-child(1) { animation-delay: .1s }
+.loading-overlay .bar:nth-child(2) { animation-delay: .2s }
+.loading-overlay .bar:nth-child(3) { animation-delay: .3s }
+.loading-overlay .bar:nth-child(4) { animation-delay: .4s }
+.loading-overlay .bar:nth-child(5) { animation-delay: .5s }
+.loading-overlay .bar:nth-child(6) { animation-delay: .6s }
+.loading-overlay .bar:nth-child(7) { animation-delay: .7s }
+.loading-overlay .bar:nth-child(8) { animation-delay: .8s }
+
+@keyframes loading {
+    0% {
+        transform: scaleY(0.1);
+        background-color: var(--text-main);
+    }
+    50% {
+        transform: scaleY(1);
+        background-color: var(--highlight);
+    }
+    100% {
+        transform: scaleY(0.1);
+        background-color: transparent;
+    }
+}
+
+.wrapper .loading-overlay {
+    display: none;
+}
+
+.graphs {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+    margin: 120px 0 70px 0;
+}
+
+.graphs h2 {
+    margin: 30px 0 0 0;
+}
+
+.graphs hr {
+    width: 80%;
+}
+
+.info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+    padding: 10px 30px;
+    position: fixed;
+    border-bottom: 1px solid var(--text-main);
+    width: calc(100% - 350px);
+    background-color: var(--background-main);
+}
+
+.filter-list {
+    display: flex;
+}
+
+.filter-list a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    border: 2px solid var(--text-main);
+    border-radius: 5px;
+    color: var(--text-main);
+    background-color: var(--highlight-alt);
+    padding: 7px;
+    margin: 5px;
+    width: 25px;
+    height: 25px;
+    text-decoration: none;
+}
+
+.storage-list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 600px;
+}
+
+.storage-list table {
+    width: 100%;
+}
+
+.process-list {
+    width: 600px;
+    margin: 50px auto;
+}
+
+.process-list table {
+    width: 100%;
+}
+
+.process-list table td {
+    max-width: 400px;
+    white-space: nowrap;
+    word-break: break-word;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
