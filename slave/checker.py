@@ -1,12 +1,23 @@
-import psutil
-import socket
+import os, psutil, datetime
+import socket, requests
 import json
-import os
-import datetime
+import logging
+from dotenv import find_dotenv, load_dotenv
 
-SAVE_FILE_PATH = "./last_qcheckserv_data.json"
+dotenv_path = find_dotenv()
+load_dotenv(dotenv_path)
+
+PROTOCOL = "http://" if os.getenv("USE_HTTP") == 'true' else "https://"
+MASTER_IP = os.getenv("MASTER_IP")
+LOG_FORMAT = os.getenv("LOG_FORMAT")
+LOG_PATH = os.getenv("LOG_PATH")
+SAVE_FILE_PATH = os.getenv("SAVE_FILE_PATH")
+
+LOG_LEVEL = logging.INFO
 DATETIME_FORMAT = "%Y-%m-%d %H:%M"
 VERSION = 1
+
+logger = logging.getLogger(__name__)
 
 def gatherData():
     if os.path.exists(SAVE_FILE_PATH):
@@ -44,12 +55,28 @@ def saveData(data):
         json.dump(data, f, indent=4)
 
 
+def sendData(data):
+    url = PROTOCOL + MASTER_IP + "/api/gather"
+    try:
+        response = requests.post(url, json=data)
+    except requests.exceptions.ConnectionError:
+        logger.error(f"Failed to connect to master node ({url})")
+        return
+    
+    if response.status_code == 200:
+        logger.debug(f"Request success")
+    else:
+        logger.error(f"Request failed ({url} returned {response.status_code})")
+
+
 def main():
     data = gatherData()
     if 'bytes_received' in data:
-        print(f"{(data['bytes_received'] / 1024 / 1024):.2f} MB | {(data['bytes_sent'] / 1024 / 1024):.2f} MB")
+        logger.debug(f"{(data['bytes_received'] / 1024 / 1024):.2f} MB | {(data['bytes_sent'] / 1024 / 1024):.2f} MB")
     saveData(data)
+    sendData(data)
 
 
 if __name__ == "__main__":
+    logging.basicConfig(filename=LOG_PATH, level=LOG_LEVEL, format=LOG_FORMAT)
     main()
