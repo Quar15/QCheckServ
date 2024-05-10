@@ -1,17 +1,24 @@
 import os, psutil, datetime
+from time import sleep
 import socket, requests
 import json
 import logging
 from dotenv import find_dotenv, load_dotenv
 
-dotenv_path = find_dotenv()
-load_dotenv(dotenv_path)
 
-PROTOCOL = "http://" if os.getenv("USE_HTTP") == 'true' else "https://"
-MASTER_IP = os.getenv("MASTER_IP")
-LOG_FORMAT = os.getenv("LOG_FORMAT")
-LOG_PATH = os.getenv("LOG_PATH")
-SAVE_FILE_PATH = os.getenv("SAVE_FILE_PATH")
+# Try to load .env
+dotenv_path = find_dotenv()
+if dotenv_path:
+    load_dotenv(dotenv_path)
+
+PROTOCOL = "http://" if os.getenv("QCHECKSERV_USE_HTTP") == 'true' else "https://"
+MASTER_IP = os.getenv("QCHECKSERV_MASTER_IP")
+LOG_FORMAT = os.getenv("QCHECKSERV_LOG_FORMAT")
+LOG_PATH = os.getenv("QCHECKSERV_LOG_PATH")
+SAVE_FILE_PATH = os.getenv("QCHECKSERV_SAVE_FILE_PATH")
+env_repeats_after_send_failure = int(os.getenv("QCHECKSERV_REPEATS_AFTER_SEND_FAILURE"), 0)
+REPEATS_AFTER_SEND_FAILURE = 0 if env_repeats_after_send_failure < 0 else env_repeats_after_send_failure
+REPEAT_AFTER_SEND_FAILURE_TIMEOUT = int(os.getenv("QCHECKSERV_REPEAT_AFTER_SEND_FAILURE_TIMEOUT"))
 
 LOG_LEVEL = logging.INFO
 DATETIME_FORMAT = "%Y-%m-%d %H:%M"
@@ -56,17 +63,22 @@ def saveData(data):
 
 
 def sendData(data):
-    url = PROTOCOL + MASTER_IP + "/api/gather"
-    try:
-        response = requests.post(url, json=data)
-    except requests.exceptions.ConnectionError:
-        logger.error(f"Failed to connect to master node ({url})")
-        return
-    
-    if response.status_code == 200:
-        logger.debug(f"Request success")
-    else:
-        logger.error(f"Request failed ({url} returned {response.status_code})")
+    repeat_counter = -1
+    while repeat_counter < REPEATS_AFTER_SEND_FAILURE:
+        repeat_counter += 1
+        url = PROTOCOL + MASTER_IP + "/api/gather"
+        try:
+            response = requests.post(url, json=data)
+        except requests.exceptions.ConnectionError:
+            logger.error(f"Failed to connect to master node ({url})")
+            sleep(REPEAT_AFTER_SEND_FAILURE_TIMEOUT)
+            continue
+        
+        if response.status_code == 200:
+            logger.debug(f"Request success")
+        else:
+            logger.error(f"Request failed ({url} returned {response.status_code})")
+            sleep(REPEAT_AFTER_SEND_FAILURE_TIMEOUT)
 
 
 def main():
