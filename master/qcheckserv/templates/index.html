@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | QCheckServ</title>
-    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,7 +19,7 @@
 <body>
     <nav>
         <div class="logo">
-            <img src="../static/img/logo.png" alt="QCheckServ">
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="QCheckServ">
         </div>
         <div class="menu">
             <a href="#" class="active"><i class='bx bxs-component'></i>Hosts (0)<div class="tag">BETA</div></a>
@@ -135,6 +135,6 @@
         var labels = ['2020-01-01 08:00:00', '2020-01-01 08:05:00', '2020-01-01 08:10:00', '2020-01-01 08:15:00', '2020-01-01 08:20:00', '2020-01-01 08:25:00', '2020-01-01 08:30:00', '2020-01-01 08:35:00', '2020-01-01 08:40:00', '2020-01-01 08:45:00', '2020-01-01 08:50:00', '2020-01-01 08:55:00', '2020-01-01 09:00:00'];
         var valuesCpu = [1, 2, 3, 4, 5, 6, 7, 8, 9, 100, 'ERROR', 12, 53];
     </script>
-    <script src="../static/js/charts.js"></script>
+    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
 </body>
 </html>
