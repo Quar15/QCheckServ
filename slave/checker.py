@@ -78,7 +78,7 @@ def sendData(data):
             logger.debug(f"Request success")
             break
         else:
-            logger.error(f"Request failed ({url} returned {response.status_code})")
+            logger.error(f"Request failed ({url} returned {response.status_code} - {response.content})")
             sleep(REPEAT_AFTER_SEND_FAILURE_TIMEOUT)
 
 

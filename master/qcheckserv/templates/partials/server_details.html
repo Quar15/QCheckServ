@@ -1,0 +1,95 @@
+<div class="info">
+    <h2>{{ server.hostname }}</h2>
+    <div class="filter-list">
+        <a href="#">3h</a>
+        <a href="#">6h</a>
+        <a href="#">12h</a>
+        <a href="#">24h</a>
+        <a href="#">3d</a>
+        <a href="#">7d</a>
+    </div>
+</div>
+<div class="graphs">
+    <div>
+        <h2>CPU usage (%)</h2>
+        <hr/>
+        <canvas id="cpuChart" width="600" height="300"></canvas>
+    </div>
+    <div>
+        <h2>Load AVG</h2>
+        <hr/>
+        <canvas id="loadAvgChart" width="600" height="300"></canvas>
+    </div>
+    <div>
+        <h2>Memory usage (%)</h2>
+        <hr/>
+        <canvas id="memoryChart" width="600" height="300"></canvas>
+    </div>
+    <div>
+        <h2>Network</h2>
+        <hr/>
+        <canvas id="networkChart" width="600" height="300"></canvas>
+    </div>
+    <div>
+        <h2>Storage usage (%)</h2>
+        <hr/>
+        <canvas id="storageChart" width="600" height="300"></canvas>
+    </div>
+    <div class="storage-list">
+        <table>
+            <tr>
+                <th>Mountpoint</th>
+                <th>Used (%)</th>
+                <th>Used (GB)</th>
+                <th>Left (GB)</th>
+                <th>Max (GB)</th>
+            </tr>
+            <tr>
+                <td>/</td>
+                <td>XXX%</td>
+                <td>XXX.XX GB</td>
+                <td>XXX.XX GB</td>
+                <td>XXX.XX GB</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="process-list">
+    <table>
+        <tr>
+            <th>Process Name</th>
+            <th>CPU Usage (%)</th>
+        </tr>
+        <tr>
+            <td>python3</td>
+            <td>XXX%</td>
+        </tr>
+        <tr>
+            <td>/usr/bin/python3 very very long process name that should not fit here</td>
+            <td>XXX%</td>
+        </tr>
+        <tr>
+            <td>python3</td>
+            <td>XXX%</td>
+        </tr>
+        <tr>
+            <td>python3</td>
+            <td>XXX%</td>
+        </tr>
+        <tr>
+            <td>python3</td>
+            <td>XXX%</td>
+        </tr>
+        <tr>
+            <td>python3</td>
+            <td>XXX%</td>
+        </tr>
+    </table>
+</div>
+</div>
+
+<script>
+    var labels = ['2020-01-01 08:00:00', '2020-01-01 08:05:00', '2020-01-01 08:10:00', '2020-01-01 08:15:00', '2020-01-01 08:20:00', '2020-01-01 08:25:00', '2020-01-01 08:30:00', '2020-01-01 08:35:00', '2020-01-01 08:40:00', '2020-01-01 08:45:00', '2020-01-01 08:50:00', '2020-01-01 08:55:00', '2020-01-01 09:00:00'];
+    var valuesCpu = [1, 2, 3, 4, 5, 6, 7, 8, 9, 100, 'ERROR', 12, 53];
+</script>
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>

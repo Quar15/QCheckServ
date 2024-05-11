@@ -11,6 +11,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
+    <script src="https://unpkg.com/htmx.org@1.6.1"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.4.1/dist/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-crosshair@1.2.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.4.0/dist/chartjs-plugin-annotation.min.js"></script>
@@ -22,13 +25,14 @@
             <img src="{{ url_for('static', filename='img/logo.png') }}" alt="QCheckServ">
         </div>
         <div class="menu">
-            <a href="#" class="active"><i class='bx bxs-component'></i>Hosts (0)<div class="tag">BETA</div></a>
+            <a href="{{ url_for('main.index') }}" class="active"><i class='bx bxs-component'></i>Hosts ({{ n_hosts }})<div class="tag">BETA</div></a>
+            <a href="#"><i class='bx bx-box'></i>Groups ({{ n_groups }})<div class="tag">BETA</div></a>
             <a href="#" class="wip"><i class='bx bxl-docker'></i>Containers (0)<div class="tag">WIP</div></a>
             <a href="#" class="wip"><i class='bx bx-data'></i>Databases (0)<div class="tag">WIP</div></a>
             <a href="#"><i class='bx bx-bell'></i>Alerts (0)<div class="tag">BETA</div></a>
         </div>
     </nav>
-    <div class="wrapper">
+    <div class="wrapper" id="wrapper" hx-get="/server-list" hx-trigger="load">
         <div class="loading-overlay">
             <div class="loading">
                 <div class="bar"></div>
@@ -41,100 +45,5 @@
                 <div class="bar"></div>
             </div>
         </div>
-        <div class="info">
-            <h2>server-hostname</h2>
-            <div class="filter-list">
-                <a href="#">3h</a>
-                <a href="#">6h</a>
-                <a href="#">12h</a>
-                <a href="#">24h</a>
-                <a href="#">3d</a>
-                <a href="#">7d</a>
-            </div>
-        </div>
-        <div class="graphs">
-            <div>
-                <h2>CPU usage (%)</h2>
-                <hr/>
-                <canvas id="cpuChart" width="600" height="300"></canvas>
-            </div>
-            <div>
-                <h2>Load AVG</h2>
-                <hr/>
-                <canvas id="loadAvgChart" width="600" height="300"></canvas>
-            </div>
-            <div>
-                <h2>Memory usage (%)</h2>
-                <hr/>
-                <canvas id="memoryChart" width="600" height="300"></canvas>
-            </div>
-            <div>
-                <h2>Network</h2>
-                <hr/>
-                <canvas id="networkChart" width="600" height="300"></canvas>
-            </div>
-            <div>
-                <h2>Storage usage (%)</h2>
-                <hr/>
-                <canvas id="storageChart" width="600" height="300"></canvas>
-            </div>
-            <div class="storage-list">
-                <table>
-                    <tr>
-                        <th>Mountpoint</th>
-                        <th>Used (%)</th>
-                        <th>Used (GB)</th>
-                        <th>Left (GB)</th>
-                        <th>Max (GB)</th>
-                    </tr>
-                    <tr>
-                        <td>/</td>
-                        <td>XXX%</td>
-                        <td>XXX.XX GB</td>
-                        <td>XXX.XX GB</td>
-                        <td>XXX.XX GB</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-        <div class="process-list">
-            <table>
-                <tr>
-                    <th>Process Name</th>
-                    <th>CPU Usage (%)</th>
-                </tr>
-                <tr>
-                    <td>python3</td>
-                    <td>XXX%</td>
-                </tr>
-                <tr>
-                    <td>/usr/bin/python3 very very long process name that should not fit here</td>
-                    <td>XXX%</td>
-                </tr>
-                <tr>
-                    <td>python3</td>
-                    <td>XXX%</td>
-                </tr>
-                <tr>
-                    <td>python3</td>
-                    <td>XXX%</td>
-                </tr>
-                <tr>
-                    <td>python3</td>
-                    <td>XXX%</td>
-                </tr>
-                <tr>
-                    <td>python3</td>
-                    <td>XXX%</td>
-                </tr>
-            </table>
-        </div>
-    </div>
-
-    <script>
-        var labels = ['2020-01-01 08:00:00', '2020-01-01 08:05:00', '2020-01-01 08:10:00', '2020-01-01 08:15:00', '2020-01-01 08:20:00', '2020-01-01 08:25:00', '2020-01-01 08:30:00', '2020-01-01 08:35:00', '2020-01-01 08:40:00', '2020-01-01 08:45:00', '2020-01-01 08:50:00', '2020-01-01 08:55:00', '2020-01-01 09:00:00'];
-        var valuesCpu = [1, 2, 3, 4, 5, 6, 7, 8, 9, 100, 'ERROR', 12, 53];
-    </script>
-    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
 </body>
 </html>
