@@ -21,9 +21,11 @@ def create_app(config_class=Config):
 
     from qcheckserv.users.routes import users
     from qcheckserv.main.routes import main
+    from qcheckserv.api.routes import api
     from qcheckserv.errors.handlers import errors
     app.register_blueprint(users)
     app.register_blueprint(main)
+    app.register_blueprint(api)
     app.register_blueprint(errors)
 
     return app

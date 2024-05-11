@@ -66,7 +66,7 @@ def sendData(data):
     repeat_counter = -1
     while repeat_counter < REPEATS_AFTER_SEND_FAILURE:
         repeat_counter += 1
-        url = PROTOCOL + MASTER_IP + "/api/gather"
+        url = PROTOCOL + MASTER_IP + "/api/gather/server"
         try:
             response = requests.post(url, json=data)
         except requests.exceptions.ConnectionError:
@@ -76,6 +76,7 @@ def sendData(data):
         
         if response.status_code == 200:
             logger.debug(f"Request success")
+            break
         else:
             logger.error(f"Request failed ({url} returned {response.status_code})")
             sleep(REPEAT_AFTER_SEND_FAILURE_TIMEOUT)
