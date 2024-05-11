@@ -235,6 +235,10 @@ nav .menu a .tag {
     border-bottom: 1px solid var(--highlight);
 }
 
+.list-group .item-header:hover {
+    color: var(--highlight);
+}
+
 .list-group .item-header h2 {
     font-size: 20px;
     font-weight: 600;
@@ -257,7 +261,7 @@ nav .menu a .tag {
     transition: max-height .4s ease-in-out;
 }
 
-.list-group.active .item-content{
+.list-group.active .item-content {
     max-height: 300px;
     transition: max-height .4s ease-in-out;
 }

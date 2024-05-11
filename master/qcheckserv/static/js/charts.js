@@ -113,30 +113,23 @@ function createConfig(labelText, dataLabels, dataValues, yAxisUnit = '%') {
     };
 }
 
-const BACKGROUND_COLOR = "rgba(99, 255, 132, 0.2)";
-const BORDER_COLOR = "rgb(99, 255, 132)";
-const CROSSHAIR_COLOR = "rgb(99, 255, 132)";
-const GRID_COLOR = "rgba(99, 255, 132, 0.1)";
-
 var ctxCpu = document.getElementById("cpuChart").getContext("2d");
 var ctxLoadAvg = document.getElementById("loadAvgChart").getContext("2d");
 var ctxMemory = document.getElementById("memoryChart").getContext("2d");
 var ctxStorage = document.getElementById("storageChart").getContext("2d");
 var ctxNetwork = document.getElementById("networkChart").getContext("2d");
 
-
-const configCpu = createConfig('CPU Usage', labels, [], '%');
-const configLoadAvg = createConfig('1 minute', labels, [], '');
-const configMemory = createConfig('Memory Usage', labels, [], '%');
-const configStorage = createConfig('ROOT', labels, [], '%');
-const configNetwork = createConfig('Download', labels, [], 'MB/s');
+var configCpu = createConfig('CPU Usage', labels, [], '%');
+var configLoadAvg = createConfig('1 minute', labels, [], '');
+var configMemory = createConfig('Memory Usage', labels, [], '%');
+var configStorage = createConfig('ROOT', labels, [], '%');
+var configNetwork = createConfig('Download', labels, [], 'MB/s');
 
 var lineChartCpu = new Chart(ctxCpu, configCpu);
 var lineChartLoadAvg = new Chart(ctxLoadAvg, configLoadAvg);
 var lineChartMemory = new Chart(ctxMemory, configMemory);
 var lineChartStorage = new Chart(ctxStorage, configStorage);
 var lineChartNetwork = new Chart(ctxNetwork, configNetwork);
-
 
 // setTimeout(()=>{addData(lineChartLoadAvg, "2020-01-01 09:00:00", 50);}, 2000);
 // setTimeout(()=>{addData(lineChartLoadAvg, "2020-01-01 09:05:00", 30);}, 3000);

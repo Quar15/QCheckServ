@@ -25,14 +25,14 @@
             <img src="{{ url_for('static', filename='img/logo.png') }}" alt="QCheckServ">
         </div>
         <div class="menu">
-            <a href="{{ url_for('main.index') }}" class="active"><i class='bx bxs-component'></i>Hosts ({{ n_hosts }})<div class="tag">BETA</div></a>
+            <a href="#" class="active" hx-get="/server-list" hx-target="#wrapper"><i class='bx bxs-component'></i>Hosts ({{ n_hosts }})<div class="tag">BETA</div></a>
             <a href="#"><i class='bx bx-box'></i>Groups ({{ n_groups }})<div class="tag">BETA</div></a>
             <a href="#" class="wip"><i class='bx bxl-docker'></i>Containers (0)<div class="tag">WIP</div></a>
             <a href="#" class="wip"><i class='bx bx-data'></i>Databases (0)<div class="tag">WIP</div></a>
             <a href="#"><i class='bx bx-bell'></i>Alerts (0)<div class="tag">BETA</div></a>
         </div>
     </nav>
-    <div class="wrapper" id="wrapper" hx-get="/server-list" hx-trigger="load">
+    <div class="wrapper" id="wrapper">
         <div class="loading-overlay">
             <div class="loading">
                 <div class="bar"></div>
@@ -46,4 +46,5 @@
             </div>
         </div>
 </body>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </html>
