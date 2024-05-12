@@ -7,11 +7,17 @@ var ctxNetwork = document.getElementById("networkChart").getContext("2d");
 // @TODO: This will break if the mountpoints changed
 var mountpointData = [];
 valuesPartitions[valuesPartitions.length-1].forEach((mountpoint) => {
-    mountpointData.push({label: mountpoint["mountpoint"], data: []});
+    mountpointData.push({label: mountpoint["mountpoint"], data: [], graph_data: []});
 });
 for (let i = 0; i < valuesPartitions.length; i++) {
     for (let j = 0; j < valuesPartitions[i].length; j++) {
-        mountpointData[j]["data"].push(valuesPartitions[i][j]["usage_perc"]);
+        mountpointData[j]["data"].push({
+            "usage_perc": valuesPartitions[i][j]["usage_perc"],
+            "total": valuesPartitions[i][j]["total"] / 1024 / 1024 / 1024,
+            "used": valuesPartitions[i][j]["used"] / 1024 / 1024 / 1024,
+            "left": (valuesPartitions[i][j]["total"] - valuesPartitions[i][j]["used"]) / 1024 / 1024 / 1024
+        });
+        mountpointData[j]["graph_data"].push(valuesPartitions[i][j]["usage_perc"]);
     }
 }
 
@@ -24,22 +30,21 @@ mountpointData.forEach((mountpoint) => {
     tr.appendChild(mountpointTd);
     
     let usedTd = document.createElement("td");
-    usedTd.innerText = padNum(mountpoint["data"][mountpoint["data"].length - 1].toFixed(2), 5) + '%';
+    usedTd.innerText = padNum(mountpoint["data"][mountpoint["data"].length - 1]["usage_perc"].toFixed(2), 5) + '%';
     tr.appendChild(usedTd);
 
-    // @TODO
+    console.log(mountpoint["data"][mountpoint["data"].length - 1]);
     let usedGbTd = document.createElement("td");
-    usedGbTd.innerText = 'XX GB';
+    usedGbTd.innerText = mountpoint["data"][mountpoint["data"].length - 1]["used"].toFixed(2) + ' GB';
     tr.appendChild(usedGbTd);
 
     let leftGbTd = document.createElement("td");
-    leftGbTd.innerText = 'XX GB';
+    leftGbTd.innerText = mountpoint["data"][mountpoint["data"].length - 1]["left"].toFixed(2) + ' GB';
     tr.appendChild(leftGbTd);
 
-    let maxGbTd = document.createElement("td");
-    maxGbTd.innerText = 'XX GB';
-    tr.appendChild(maxGbTd);
-    //
+    let totalGbTd = document.createElement("td");
+    totalGbTd.innerText = mountpoint["data"][mountpoint["data"].length - 1]["total"].toFixed(2) + ' GB';
+    tr.appendChild(totalGbTd);
 
     storageListTable.appendChild(tr);
 });
@@ -47,7 +52,7 @@ mountpointData.forEach((mountpoint) => {
 var configCpu = createConfig('CPU Usage', labels, valuesCpu, '%');
 var configLoadAvg = createConfig('1 minute', labels, valuesOneMinuteLoadAvg, '');
 var configMemory = createConfig('Memory Usage', labels, valuesMem, '%');
-var configStorage = createConfig('ROOT', labels, mountpointData.shift()["data"], '%');
+var configStorage = createConfig('ROOT', labels, mountpointData.shift()["graph_data"], '%');
 var configNetwork = createConfig('Download', labels, valuesBytesReceived, 'MB/s');
 
 var lineChartCpu = new Chart(ctxCpu, configCpu);
@@ -90,7 +95,7 @@ for (let i = 0; i < mountpointData.length; i++) {
         borderColor: 'rgba(' + COLORS[i+1] + ', 1)',
         fill: true,
         borderWidth: 3,
-        data: mountpointData[i]["data"],
+        data: mountpointData[i]["graph_data"],
     });
 };
 

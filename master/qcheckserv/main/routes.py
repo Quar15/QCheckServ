@@ -25,6 +25,7 @@ def server_list():
 def server_details(id: int):
     server = Server.query.get(id)
     values = ServerData.query.filter_by(server_id=id).order_by(ServerData.timestamp.desc()).limit(13).all()
+    values.reverse()
     labels = [datetime.strftime(val.timestamp, DATETIME_FORMAT) for val in values]
     values_cpu = [val.cpu_perc for val in values]
     values_loadavg = [val.loadavg for val in values] 

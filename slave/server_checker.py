@@ -43,7 +43,9 @@ def gatherData():
     for partition in psutil.disk_partitions():
         data['partitions'].append({
             "mountpoint": partition.mountpoint, 
-            "usage_perc": psutil.disk_usage(partition.mountpoint).percent
+            "usage_perc": psutil.disk_usage(partition.mountpoint).percent,
+            "used": psutil.disk_usage(partition.mountpoint).used,
+            "total": psutil.disk_usage(partition.mountpoint).total,
         })
 
     net_io_counters = psutil.net_io_counters()
