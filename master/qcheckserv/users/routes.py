@@ -8,6 +8,24 @@ from qcheckserv.users.forms import LoginForm, RegistrationForm
 users = Blueprint('users', __name__)
 
 
+@users.route("/users/list", methods=['GET', 'POST'])
+def user_list():
+    page = request.args.get('page', 1, type=int)
+    users = User.query.order_by(User.id).paginate(page=page, per_page=50)
+    print(users.items)
+    return render_template('partials/user/list.html', users=users)
+
+
+@users.route("/users/<id>/edit", methods=['GET', 'POST'])
+def user_edit(id: int):
+    return ''
+
+
+@users.route("/users/<id>/delete", methods=['GET', 'POST'])
+def user_delete(id: int):
+    return ''
+
+
 @users.route("/users/create", methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()

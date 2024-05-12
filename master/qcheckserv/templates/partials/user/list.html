@@ -1,0 +1,31 @@
+<div class="item-groups">
+    <div class="list-group">
+        <div class="item-header">
+            <h2>Users</h2>
+            <div class="icon">+</div>
+        </div>
+        <div class="item-content">
+            <div class="btn" hx-get="{{ url_for('users.register') }}" hx-target="#wrapper">Create new user</div>
+            <div class="table-wrapper">
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th></th>
+                    </tr>
+                    {% for user in users.items %}
+                        <tr>
+                            <td>{{ user.pretty_name }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>
+                                <i class='bx bx-edit-alt' hx-get="{{ url_for('users.user_edit', id=user.id) }}" hx-target="#wrapper"></i>
+                                <i class='bx bxs-trash' hx-get="{{ url_for('users.user_delete', id=user.id) }}" hx-target="#wrapper" hx-confirm="Delete user '{{ user.pretty_name }}'?"></i>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='js/accordion.js') }}"></script>

@@ -18,6 +18,20 @@ body {
     margin: 0;
 }
 
+.btn {
+    display: flex;
+    margin: 5px;
+    padding: 10px 15px;
+    border: 1px solid var(--highlight);
+    border-radius: 5px;
+}
+
+.btn:hover {
+    background-color: var(--highlight);
+    color: var(--background-main);
+    cursor: pointer;
+}
+
 nav {
     min-width: 250px;
     position: fixed;
@@ -308,4 +322,17 @@ nav .menu a .tag {
     background-color: transparent;
     color: var(--highlight);
     font-size: 30px;
+}
+
+.list-group .item-content table tr i {
+    font-size: 21px;
+    margin-right: 10px;
+}
+
+.list-group .item-content table tr i:hover {
+    color: var(--highlight);
+}
+
+.list-group .item-content .btn {
+    margin: 20px auto 0 0;
 }

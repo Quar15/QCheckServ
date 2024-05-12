@@ -1,16 +1,29 @@
 from flask import render_template, Blueprint
 from flask_login import login_required
 from qcheckserv.api.models import Server, ServerData, ServerGroup
+from qcheckserv.users.models import User
 from datetime import datetime
 
 main = Blueprint('main', __name__)
 DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
+
+@main.route("/heartbeat")
+def heartbeat():
+    return ""
+
+
 @main.route("/")
 def index():
     n_hosts = Server.query.count()
     n_groups = ServerGroup.query.count()
-    return render_template("index.html", n_hosts=n_hosts, n_groups=n_groups)
+    n_users = User.query.count()
+    return render_template(
+        "index.html",
+        n_hosts=n_hosts,
+        n_groups=n_groups,
+        n_users=n_users,
+    )
 
 
 @main.route("/server-list")
@@ -18,7 +31,7 @@ def server_list():
     server_groups = ServerGroup.query.all()
     servers = Server.query.all()
     server_groups.append(ServerGroup(name='All', servers=servers))
-    return render_template("partials/server_list.html", server_groups=server_groups)
+    return render_template("partials/server/list.html", server_groups=server_groups)
 
 
 @main.route("/server/<id>")
@@ -26,6 +39,7 @@ def server_details(id: int):
     server = Server.query.get(id)
     values = ServerData.query.filter_by(server_id=id).order_by(ServerData.timestamp.desc()).limit(13).all()
     values.reverse()
+    # @TODO: labels should be generated for every 5 minutes and values not in timeframe should have empty elements
     labels = [datetime.strftime(val.timestamp, DATETIME_FORMAT) for val in values]
     values_cpu = [val.cpu_perc for val in values]
     values_loadavg = [val.loadavg for val in values] 
@@ -34,7 +48,7 @@ def server_details(id: int):
     values_bytes_received = [val.bytes_received / 1024 / 1024 for val in values]
     values_bytes_sent = [val.bytes_sent / 1024 / 1024  for val in values]
     return render_template(
-        "partials/server_details.html", 
+        "partials/server/details.html", 
         server=server, 
         labels=labels, 
         values_cpu=values_cpu,
@@ -46,6 +60,6 @@ def server_details(id: int):
     )
 
 
-@main.route("/heartbeat")
-def heartbeat():
-    return ""
+@main.route("/server/group/list")
+def server_group_list():
+    return ''
