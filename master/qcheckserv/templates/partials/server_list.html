@@ -6,40 +6,43 @@
                 <div class="icon">+</div>
             </div>
             <div class="item-content">
-                <table>
-                    <tr>
-                        <th>Hostname</th>
-                        <th>CPU Usage (%)</th>
-                        <th>RAM Usage (%)</th>
-                        <th>Load Average</th>
-                        <th>Last Update</th>
-                        <th></th>
-                    </tr>
-                    {% for server in group.servers %}
-                        <tr hx-get="/server/{{server.id}}" hx-target="#wrapper">
-                            <td>{{ server.hostname }}</td>
-                            {% with last_data = server.get_last_data()  %}
-                                {% if last_data %}
-                                    <td>{{ "{:.2f}".format(last_data.cpu_perc) }} %</td>
-                                    <td>{{ "{:.2f}".format(last_data.mem_perc) }} %</td>
-                                    <td>
-                                        {% for loadavg in last_data.loadavg %}
-                                            {{ "{:.2f}".format(loadavg) }}
-                                        {% endfor %}
-                                    </td>
-                                    <td>{{ last_data.timestamp }}</td>
-                                    <td><div class="alerts">9</div></td>
-                                {% else %}
-                                    <td>? %</td>
-                                    <td>? %</td>
-                                    <td>?</td>
-                                    <td>Never</td>
-                                    <td><div class="alerts ok"><i class='bx bxs-check-circle'></i></div></td>
-                                {% endif %}
-                            {% endwith %}
+                <div class="table-wrapper">
+                    <table>
+                        <tr>
+                            <th>Hostname</th>
+                            <th>CPU Usage (%)</th>
+                            <th>RAM Usage (%)</th>
+                            <th>Load Average</th>
+                            <th>Last Update</th>
+                            <th></th>
                         </tr>
-                    {% endfor %}
-                </table>
+                        {% for server in group.servers %}
+                            <tr hx-get="/server/{{server.id}}" hx-target="#wrapper">
+                                <td>{{ server.hostname }}</td>
+                                {% with last_data = server.get_last_data()  %}
+                                    {% if last_data %}
+                                        <td>{{ "{:.2f}".format(last_data.cpu_perc) }} %</td>
+                                        <td>{{ "{:.2f}".format(last_data.mem_perc) }} %</td>
+                                        <td>
+                                            {% for loadavg in last_data.loadavg %}
+                                                {{ "{:.2f}".format(loadavg) }}
+                                            {% endfor %}
+                                        </td>
+                                        <td>{{ last_data.timestamp }}</td>
+                                        <td><div class="alerts">9</div></td>
+                                    {% else %}
+                                    <!-- Is this, besides testing, ever a possibility? -->
+                                        <td>? %</td>
+                                        <td>? %</td>
+                                        <td>?</td>
+                                        <td>Never</td>
+                                        <td><div class="alerts ok"><i class='bx bxs-check-circle'></i></div></td>
+                                    {% endif %}
+                                {% endwith %}
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
             </div>
         </div>
     {% endfor %}

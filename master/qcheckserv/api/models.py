@@ -15,7 +15,7 @@ class Server(db.Model):
     )
     
     def get_last_data(self) -> 'ServerData':
-        return ServerData.query.filter_by(server_id=self.id).order_by(ServerData.timestamp).first()
+        return ServerData.query.filter_by(server_id=self.id).order_by(ServerData.timestamp.desc()).first()
 
     def __repr__(self):
         return f"Server({self.id}, '{self.hostname}')"

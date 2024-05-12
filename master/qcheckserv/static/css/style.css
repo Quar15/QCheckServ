@@ -256,14 +256,18 @@ nav .menu a .tag {
 }
 
 .list-group .item-content {
-    max-height: 0;
+    display: grid;
+    grid-template-rows: 0fr;
     overflow: hidden;
-    transition: max-height .4s ease-in-out;
+    transition: grid-template-rows .4s ease-in-out;
 }
 
 .list-group.active .item-content {
-    max-height: 300px;
-    transition: max-height .4s ease-in-out;
+    grid-template-rows: 1fr;
+}
+
+.list-group .item-content .table-wrapper {
+    overflow: hidden;
 }
 
 .list-group .item-content table {
