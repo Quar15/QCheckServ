@@ -1,0 +1,6 @@
+[Unit]
+Description=Send resource usage data to QCheckServ master node
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /usr/local/bin/qcheckserv/server_checker.py
