@@ -197,6 +197,14 @@ nav .menu a .tag {
     width: 100%;
 }
 
+.storage-list table th {
+    padding: 10px 0;
+}
+
+.storage-list table td {
+    padding: 5px 0;
+}
+
 .process-list {
     width: 600px;
     margin: 50px auto;
