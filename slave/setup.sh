@@ -11,7 +11,7 @@ if [ ! -d "${BIN_PATH}"  ]; then
     echo "@INFO: Installing qcheckserv"
 else
     echo "@INFO: Updating qcheckserv"
-    rm -rf "${BIN_PATH}/"
+    rm -rf "${BIN_PATH}/*.py"
 fi
 mkdir "${BIN_PATH}"
 
