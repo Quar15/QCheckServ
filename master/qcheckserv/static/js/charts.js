@@ -9,6 +9,8 @@ var mountpointData = [];
 valuesPartitions[valuesPartitions.length-1].forEach((mountpoint) => {
     mountpointData.push({label: mountpoint["mountpoint"], data: [], graph_data: []});
 });
+console.log(valuesPartitions[0]);
+console.log(mountpointData);
 for (let i = 0; i < valuesPartitions.length; i++) {
     for (let j = 0; j < valuesPartitions[i].length; j++) {
         mountpointData[j]["data"].push({
@@ -28,23 +30,24 @@ mountpointData.forEach((mountpoint) => {
     let mountpointTd = document.createElement("td");
     mountpointTd.innerText = mountpoint["label"];
     tr.appendChild(mountpointTd);
+
+    if (mountpoint["data"][mountpoint["data"].length - 1]["usage_perc"] != 'ERROR') {
+        let usedTd = document.createElement("td");
+        usedTd.innerText = padNum(mountpoint["data"][mountpoint["data"].length - 1]["usage_perc"].toFixed(2), 5) + '%';
+        tr.appendChild(usedTd);
     
-    let usedTd = document.createElement("td");
-    usedTd.innerText = padNum(mountpoint["data"][mountpoint["data"].length - 1]["usage_perc"].toFixed(2), 5) + '%';
-    tr.appendChild(usedTd);
-
-    console.log(mountpoint["data"][mountpoint["data"].length - 1]);
-    let usedGbTd = document.createElement("td");
-    usedGbTd.innerText = mountpoint["data"][mountpoint["data"].length - 1]["used"].toFixed(2) + ' GB';
-    tr.appendChild(usedGbTd);
-
-    let leftGbTd = document.createElement("td");
-    leftGbTd.innerText = mountpoint["data"][mountpoint["data"].length - 1]["left"].toFixed(2) + ' GB';
-    tr.appendChild(leftGbTd);
-
-    let totalGbTd = document.createElement("td");
-    totalGbTd.innerText = mountpoint["data"][mountpoint["data"].length - 1]["total"].toFixed(2) + ' GB';
-    tr.appendChild(totalGbTd);
+        let usedGbTd = document.createElement("td");
+        usedGbTd.innerText = mountpoint["data"][mountpoint["data"].length - 1]["used"].toFixed(2) + ' GB';
+        tr.appendChild(usedGbTd);
+    
+        let leftGbTd = document.createElement("td");
+        leftGbTd.innerText = mountpoint["data"][mountpoint["data"].length - 1]["left"].toFixed(2) + ' GB';
+        tr.appendChild(leftGbTd);
+    
+        let totalGbTd = document.createElement("td");
+        totalGbTd.innerText = mountpoint["data"][mountpoint["data"].length - 1]["total"].toFixed(2) + ' GB';
+        tr.appendChild(totalGbTd);
+    }
 
     storageListTable.appendChild(tr);
 });
@@ -107,3 +110,5 @@ addLineToChart(lineChartCpu, 'transparent', 25);
 addLineToChart(lineChartMemory, 'transparent', 25);
 addLineToChart(lineChartStorage, 'transparent', 25);
 
+
+updateFilterList();

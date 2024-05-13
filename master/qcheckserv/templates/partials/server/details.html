@@ -1,12 +1,12 @@
 <div class="info">
     <h2>{{ server.hostname }}</h2>
-    <div class="filter-list">
-        <a href="#">3h</a>
-        <a href="#">6h</a>
-        <a href="#">12h</a>
-        <a href="#">24h</a>
-        <a href="#">3d</a>
-        <a href="#">7d</a>
+    <div class="filter-list" id="filter-list">
+        <a href="#" hx-get="{{ url_for('servers.server_details', id=server.id) }}" hx-target="#wrapper">3h</a>
+        <a href="#" hx-get="{{ url_for('servers.server_details', id=server.id) }}" hx-target="#wrapper">6h</a>
+        <a href="#" hx-get="{{ url_for('servers.server_details', id=server.id) }}" hx-target="#wrapper">12h</a>
+        <a href="#" hx-get="{{ url_for('servers.server_details', id=server.id) }}" hx-target="#wrapper">24h</a>
+        <a href="#" hx-get="{{ url_for('servers.server_details', id=server.id) }}" hx-target="#wrapper">3d</a>
+        <a href="#" hx-get="{{ url_for('servers.server_details', id=server.id) }}" hx-target="#wrapper">7d</a>
     </div>
 </div>
 <div class="graphs">
@@ -83,12 +83,12 @@
 
 <script>
     var labels = {{ labels | safe }};
-    var valuesCpu = {{ values_cpu | safe }};
-    var valuesLoadavg = {{ values_loadavg | safe }};
-    var valuesMem = {{ values_mem | safe }};
-    var valuesPartitions = {{ values_partitions | tojson | safe }};
-    var valuesBytesReceived = {{ values_bytes_received | safe }};
-    var valuesBytesSent = {{ values_bytes_sent | safe }};
+    var valuesCpu = {{ server_data_response.values_cpu | safe }};
+    var valuesLoadavg = {{ server_data_response.values_loadavg | safe }};
+    var valuesMem = {{ server_data_response.values_mem | safe }};
+    var valuesPartitions = {{ server_data_response.values_partitions | tojson | safe }};
+    var valuesBytesReceived = {{ server_data_response.values_bytes_received | safe }};
+    var valuesBytesSent = {{ server_data_response.values_bytes_sent | safe }};
 
     var valuesOneMinuteLoadAvg = [];
     var valuesFiveMinuteLoadAvg = [];

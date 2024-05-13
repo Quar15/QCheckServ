@@ -4,8 +4,9 @@ from wtforms import BooleanField, StringField
 from qcheckserv import db
 from qcheckserv.servers.models import Server, ServerData, ServerGroup
 from qcheckserv.servers.forms import ServerGroupCreationForm
+from qcheckserv.servers.utils import ServerDataResponse
 from qcheckserv.users.models import User
-from datetime import datetime
+from datetime import datetime, timedelta
 
 servers = Blueprint('servers', __name__)
 DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
@@ -105,27 +106,52 @@ def server_group_list_create():
     )
 
 
+def get_labels_and_datetimes_in_timeframe(timestamp_since, timestamp_to):
+    labels = []
+    datetimes = []
+    x = timestamp_to
+    x = x.replace(second=0)
+    while x.minute % 5 != 0:
+        x -= timedelta(minutes=1)
+    while x >= timestamp_since:
+        labels.append(datetime.strftime(x, DATETIME_FORMAT))
+        datetimes.append(x)
+        x -= timedelta(minutes=5)
+    return labels, datetimes
+
+
 @servers.route("/server/<id>")
 def server_details(id: int):
     server = Server.query.get(id)
-    values = ServerData.query.filter_by(server_id=id).order_by(ServerData.timestamp.desc()).limit(13).all()
+    timestamp_since = request.args.get('since', default=None)
+    timestamp_since = (datetime.now() - timedelta(hours = 3)) if timestamp_since is None else datetime.strptime(timestamp_since, DATETIME_FORMAT)
+    timestamp_to = request.args.get('to', default=None)
+    timestamp_to = datetime.now() if timestamp_to is None else datetime.strptime(timestamp_to, DATETIME_FORMAT)
+    # @TODO: Add generalization of data for higher timeframes
+    values = (ServerData
+        .query
+        .filter_by(server_id=id)
+        .filter(ServerData.timestamp >= timestamp_since)
+        .filter(ServerData.timestamp <= timestamp_to)
+        .order_by(ServerData.timestamp.desc())
+        .limit(1000)
+        .all()
+    )
     values.reverse()
-    # @TODO: labels should be generated for every 5 minutes and values not in timeframe should have empty elements
-    labels = [datetime.strftime(val.timestamp, DATETIME_FORMAT) for val in values]
-    values_cpu = [val.cpu_perc for val in values]
-    values_loadavg = [val.loadavg for val in values] 
-    values_mem = [val.mem_perc for val in values]
-    values_partitions = [val.partitions for val in values]
-    values_bytes_received = [val.bytes_received / 1024 / 1024 for val in values]
-    values_bytes_sent = [val.bytes_sent / 1024 / 1024  for val in values]
+    # Labels should be generated for every 5 minutes and values not in timeframe should have empty elements
+    labels, datetimes = get_labels_and_datetimes_in_timeframe(timestamp_since, timestamp_to)
+    server_data_response = ServerDataResponse()
+    for dt in datetimes:
+        value_for_datetime = 'ERROR'
+        for val in values:
+            if abs((dt - val.timestamp).total_seconds()) < 50:
+                value_for_datetime = val
+                break
+        server_data_response.append_value(value_for_datetime)
+    server_data_response.try_to_fix_partitions_data()
     return render_template(
         "partials/server/details.html", 
         server=server, 
         labels=labels, 
-        values_cpu=values_cpu,
-        values_loadavg=values_loadavg,
-        values_mem=values_mem,
-        values_partitions=values_partitions,
-        values_bytes_received=values_bytes_received,
-        values_bytes_sent=values_bytes_sent,
+        server_data_response=server_data_response
     )

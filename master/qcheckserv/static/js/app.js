@@ -18,6 +18,20 @@ function padNum(num, size) {
     return num;
 }
 
+function formatDate(date) {
+    let datePart = [
+        date.getFullYear(),
+        date.getMonth() + 1,
+        date.getDate(),
+    ].map((n, i) => n.toString().padStart(i === 4 ? 4 : 2, "0")).join("-");
+    let timePart = [
+        date.getHours(),
+        date.getMinutes(),
+        date.getSeconds()
+    ].map((n, i) => n.toString().padStart(2, "0")).join(":");
+    return datePart + " " + timePart;
+  }
+
 // Add alert line
 function addLineToChart(chart, color, value) {
     if (!chart.config.options.plugins.annotation) {
@@ -45,7 +59,6 @@ function addData(chart, newData, datasetIndex = -1) {
         });
     }
     chart.update();
-    // removeData(chart);
 }
 
 function addDataset(chart, dataset) {
@@ -159,4 +172,14 @@ function updateNavFocus(buttonIndex) {
         navLinksMap[a.innerText.toLowerCase().split(' (')[0]] = a;
     });
     navLinksMap[buttonIndex].classList.add("active");
+}
+
+function updateFilterList() {
+    filterListLinks = document.querySelectorAll("#filter-list a");
+    timeframes = [3, 6, 12, 24, 72, 168];
+    for(let i=0; i < timeframes.length; i++) {
+        let hours = timeframes[i];
+        let ms = new Date(Date.now() - hours * 60*60*1000);
+        filterListLinks[i].setAttribute("hx-vals", '{"since": "' + formatDate(ms) + '"}');
+    }
 }
