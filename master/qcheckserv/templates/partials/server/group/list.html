@@ -1,0 +1,32 @@
+<div class="item-groups">
+    <div class="list-group">
+        <div class="item-header">
+            <h2>Groups</h2>
+            <div class="icon">+</div>
+        </div>
+        <div class="item-content">
+            <a class="btn" href="{{ url_for('servers.server_group_list_create') }}">Create new group</a>
+            <div class="table-wrapper">
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Servers</th>
+                        <th></th>
+                    </tr>
+                    {% for group in server_groups %}
+                        <tr>
+                            <td>{{ group.name }}</td>
+                            <td>{{ group.servers | length }}</td>
+                            <td>
+                                <a href="{{ url_for('servers.server_group_list_edit', id=group.id) }}"><i class='bx bx-edit-alt'></i></a>
+                                <i class='bx bxs-trash' hx-get="{{ url_for('servers.server_group_list_delete', id=group.id) }}" hx-target="#wrapper" hx-confirm="Delete group '{{ group.name }}'?"></i>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='js/accordion.js') }}"></script>
+<script>updateNavFocus('groups');</script>

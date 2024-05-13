@@ -150,3 +150,13 @@ function createConfig(labelText, dataLabels, dataValues, yAxisUnit = '%') {
         },
     };
 }
+
+function updateNavFocus(buttonIndex) {
+    navLinks = document.querySelectorAll("nav a");
+    navLinksMap = {}
+    navLinks.forEach((a) => {
+        a.classList.remove("active");
+        navLinksMap[a.innerText.toLowerCase().split(' (')[0]] = a;
+    });
+    navLinksMap[buttonIndex].classList.add("active");
+}

@@ -20,10 +20,12 @@ def create_app(config_class=Config):
     login_manager.init_app(app)
 
     from qcheckserv.users.routes import users
+    from qcheckserv.servers.routes import servers
     from qcheckserv.main.routes import main
     from qcheckserv.api.routes import api
     from qcheckserv.errors.handlers import errors
     app.register_blueprint(users)
+    app.register_blueprint(servers)
     app.register_blueprint(main)
     app.register_blueprint(api)
     app.register_blueprint(errors)

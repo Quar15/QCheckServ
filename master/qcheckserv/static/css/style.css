@@ -18,12 +18,18 @@ body {
     margin: 0;
 }
 
-.btn {
-    display: flex;
+a {
+    text-decoration: none;
+}
+
+.btn, input, fieldset {
     margin: 5px;
     padding: 10px 15px;
     border: 1px solid var(--highlight);
     border-radius: 5px;
+    font-family: "Montserrat", sans-serif;
+    background-color: var(--background-main);
+    color: var(--text-main);
 }
 
 .btn:hover {
@@ -324,6 +330,10 @@ nav .menu a .tag {
     font-size: 30px;
 }
 
+.list-group .item-content table tr a {
+    color: var(--text-main);
+}
+
 .list-group .item-content table tr i {
     font-size: 21px;
     margin-right: 10px;
@@ -335,4 +345,51 @@ nav .menu a .tag {
 
 .list-group .item-content .btn {
     margin: 20px auto 0 0;
+}
+
+.wrapper:has(> form) {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+form {
+    margin: 150px 0;
+}
+
+form h2 {
+    text-align: center;
+}
+
+form .form-group label {
+    display: inline-block;
+    min-width: 200px;
+}
+
+form .form-group .btn {
+    width: 100%;
+    background-color: var(--background-main);
+    color: var(--text-main);
+    margin: 15px 0;
+}
+
+form .form-group .btn:hover {
+    cursor: pointer;
+    background-color: var(--highlight);
+    color: var(--background-main);
+}
+
+form .invalid-feedback {
+    color: var(--error);
+    padding: 10px;
+}
+
+form .form-group .server-list {
+    padding: 0 10px 10px 15px;
+}
+
+form .form-group .server-list div {
+    margin: 5px 0;
 }

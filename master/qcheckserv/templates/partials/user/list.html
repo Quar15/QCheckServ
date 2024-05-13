@@ -5,7 +5,7 @@
             <div class="icon">+</div>
         </div>
         <div class="item-content">
-            <div class="btn" hx-get="{{ url_for('users.register') }}" hx-target="#wrapper">Create new user</div>
+            <a class="btn" href="{{ url_for('users.register') }}">Create new user</a>
             <div class="table-wrapper">
                 <table>
                     <tr>
@@ -18,7 +18,7 @@
                             <td>{{ user.pretty_name }}</td>
                             <td>{{ user.username }}</td>
                             <td>
-                                <i class='bx bx-edit-alt' hx-get="{{ url_for('users.user_edit', id=user.id) }}" hx-target="#wrapper"></i>
+                                <a href="{{ url_for('users.user_edit', id=user.id) }}"><i class='bx bx-edit-alt'></i></a>
                                 <i class='bx bxs-trash' hx-get="{{ url_for('users.user_delete', id=user.id) }}" hx-target="#wrapper" hx-confirm="Delete user '{{ user.pretty_name }}'?"></i>
                             </td>
                         </tr>
@@ -29,3 +29,4 @@
     </div>
 </div>
 <script src="{{ url_for('static', filename='js/accordion.js') }}"></script>
+<script>updateNavFocus('users');</script>

@@ -1,17 +1,15 @@
 {% extends "layout.html" %}
 {% block content %}
-    <div class="wrapper" id="wrapper">
-        <div class="loading-overlay">
-            <div class="loading">
-                <div class="bar"></div>
-                <div class="bar"></div>
-                <div class="bar"></div>
-                <div class="bar"></div>
-                <div class="bar"></div>
-                <div class="bar"></div>
-                <div class="bar"></div>
-                <div class="bar"></div>
-            </div>
+    <div class="loading-overlay" hx-get="{{ hx_get_list_url }}" hx-target="#wrapper" hx-trigger="load">
+        <div class="loading">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
         </div>
     </div>
 {% endblock content %}

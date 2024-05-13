@@ -2,28 +2,62 @@ from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
 from qcheckserv import db, bcrypt
 from qcheckserv.users.models import User
-from qcheckserv.users.forms import LoginForm, RegistrationForm
+from qcheckserv.servers.models import Server, ServerGroup
+from qcheckserv.users.forms import LoginForm, RegistrationForm, UserEditForm
 
 
 users = Blueprint('users', __name__)
 
 
-@users.route("/users/list", methods=['GET', 'POST'])
+@users.route("/users/partial/list", methods=['GET', 'POST'])
 def user_list():
     page = request.args.get('page', 1, type=int)
     users = User.query.order_by(User.id).paginate(page=page, per_page=50)
-    print(users.items)
     return render_template('partials/user/list.html', users=users)
 
 
 @users.route("/users/<id>/edit", methods=['GET', 'POST'])
 def user_edit(id: int):
-    return ''
+    user = User.query.get_or_404(id)
+    form = UserEditForm()
+    if form.validate_on_submit():
+        if form.password.data:
+            hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+            user.password = hashed_password
+        user.username = form.username.data
+        user.pretty_name = form.pretty_name.data
+        db.session.commit()
+        flash(f"Account '{user.username}' has been updated", 'success')
+        return redirect(url_for('main.index', list="users"))
+    elif request.method == 'GET':
+        form.user_id.data = user.id
+        form.username.data = user.username
+        form.pretty_name.data = user.pretty_name
+    n_hosts = Server.query.count()
+    n_groups = ServerGroup.query.count()
+    n_users = User.query.count()
+    return render_template(
+        'users/create.html', 
+        title='Update User',
+        form=form,
+        action_url=url_for('users.user_edit', id=user.id),
+        n_hosts=n_hosts,
+        n_groups=n_groups,
+        n_users=n_users,
+    )
 
 
 @users.route("/users/<id>/delete", methods=['GET', 'POST'])
 def user_delete(id: int):
-    return ''
+    user = User.query.get_or_404(id)
+    if user.id == current_user.id:
+        flash(f"Cannot remove current account", 'error')
+        return redirect(url_for('users.user_list'))
+    user_name = user.pretty_name
+    db.session.delete(user)
+    db.session.commit()
+    flash(f"User '{user_name}' has been deleted", 'success')
+    return redirect(url_for('users.user_list'))
 
 
 @users.route("/users/create", methods=['GET', 'POST'])
@@ -35,7 +69,19 @@ def register():
         db.session.add(user)
         db.session.commit()
         flash(f"Account '{user.username}' created", 'success')
-    return render_template('users/create.html', title='Register', form=form)
+        return redirect(url_for('main.index'))
+    n_hosts = Server.query.count()
+    n_groups = ServerGroup.query.count()
+    n_users = User.query.count()
+    return render_template(
+        'users/create.html', 
+        title='Create User', 
+        action_url=url_for('users.register'),
+        form=form,
+        n_hosts=n_hosts,
+        n_groups=n_groups,
+        n_users=n_users,
+    )
 
 
 @users.route("/login", methods=['GET', 'POST'])

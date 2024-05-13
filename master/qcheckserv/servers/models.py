@@ -10,7 +10,7 @@ class Server(db.Model):
     server_group = db.relationship(
         'ServerGroup',
         secondary='server_server_group_helper',
-        back_populates='servers',
+        backref='servers',
         lazy=True
     )
     
@@ -46,13 +46,6 @@ class ServerServerGroupHelper(db.Model):
 class ServerGroup(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
-
-    servers = db.relationship(
-        'Server',
-        secondary='server_server_group_helper',
-        back_populates='server_group',
-        lazy=True
-    )
 
     def __repr__(self):
         return f"ServerGroup({self.id}, {self.name})"

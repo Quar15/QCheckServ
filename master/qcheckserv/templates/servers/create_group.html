@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block content %}
+    <form method="POST" action="{{ action_url }}">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <h2>{{ title }}</h2>
+            <div class="form-group">
+                {{ form.name.label(class="form-control-label") }}
+                {% if form.name.errors %}
+                    {{ form.name(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.name(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <h3>Servers</h3>
+                {% for s in servers %}
+                    <div class="server-list">
+                        {{ form[s.hostname](class="form-control form-control-lg") }}
+                        {{ form[s.hostname].label(class="form-control form-control-lg") }}
+                    </div>
+                {% endfor %}
+            </div>
+        </fieldset>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+    </form>
+    <script defer>updateNavFocus('groups');</script>
+{% endblock content %}

@@ -2,7 +2,7 @@ from flask import url_for, request, Blueprint
 import json
 from datetime import datetime
 from qcheckserv import db
-from qcheckserv.api.models import Server, ServerData
+from qcheckserv.servers.models import Server, ServerData
 
 
 api = Blueprint('api', __name__)

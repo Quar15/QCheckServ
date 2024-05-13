@@ -17,7 +17,7 @@
                             <th></th>
                         </tr>
                         {% for server in group.servers %}
-                            <tr hx-get="/server/{{server.id}}" hx-target="#wrapper">
+                            <tr hx-get="{{ url_for('servers.server_details', id=server.id) }}" hx-target="#wrapper">
                                 <td>{{ server.hostname }}</td>
                                 {% with last_data = server.get_last_data()  %}
                                     {% if last_data %}
@@ -48,3 +48,4 @@
     {% endfor %}
 </div>
 <script src="{{ url_for('static', filename='js/accordion.js') }}"></script>
+<script>updateNavFocus('hosts');</script>
