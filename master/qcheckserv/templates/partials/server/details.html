@@ -1,12 +1,21 @@
 <div class="info">
     <h2>{{ server.hostname }}</h2>
-    <div class="filter-list" id="filter-list">
-        <a href="#" hx-get="{{ url_for('servers.server_details', id=server.id) }}" hx-target="#wrapper">3h</a>
-        <a href="#" hx-get="{{ url_for('servers.server_details', id=server.id) }}" hx-target="#wrapper">6h</a>
-        <a href="#" hx-get="{{ url_for('servers.server_details', id=server.id) }}" hx-target="#wrapper">12h</a>
-        <a href="#" hx-get="{{ url_for('servers.server_details', id=server.id) }}" hx-target="#wrapper">24h</a>
-        <a href="#" hx-get="{{ url_for('servers.server_details', id=server.id) }}" hx-target="#wrapper">3d</a>
-        <a href="#" hx-get="{{ url_for('servers.server_details', id=server.id) }}" hx-target="#wrapper">7d</a>
+    <div class="filters">
+        <div class="filter-list" id="filter-list">
+            <a href="#" hx-get="{{ url_for('servers.server_details', id=server.id) }}" hx-target="#wrapper">3h</a>
+            <a href="#" hx-get="{{ url_for('servers.server_details', id=server.id) }}" hx-target="#wrapper">6h</a>
+            <a href="#" hx-get="{{ url_for('servers.server_details', id=server.id) }}" hx-target="#wrapper">12h</a>
+            <a href="#" hx-get="{{ url_for('servers.server_details', id=server.id) }}" hx-target="#wrapper">24h</a>
+            <a href="#" hx-get="{{ url_for('servers.server_details', id=server.id) }}" hx-target="#wrapper">3d</a>
+            <a href="#" hx-get="{{ url_for('servers.server_details', id=server.id) }}" hx-target="#wrapper">7d</a>
+        </div>
+        <form class="search-timeframe">
+            <label for="sinceDatetime">Since:</label>
+            <input type="datetime" name="since" id="sinceDatetime" value="{{ since }}">
+            <label for="toDatetime">To:</label>
+            <input type="datetime" name="to" id="toDatetime" value="{{ to }}">
+            <button class="btn" hx-get="{{ url_for('servers.server_details', id=server.id) }}" hx-target="#wrapper" hx-vals="js:{since: getInputVal('sinceDatetime'), to: getInputVal('toDatetime')}">Filter</button>
+        </form>
     </div>
 </div>
 <div class="graphs">

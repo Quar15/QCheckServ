@@ -120,13 +120,29 @@ def get_labels_and_datetimes_in_timeframe(timestamp_since, timestamp_to):
     return labels, datetimes
 
 
+def get_timestamps(request, earliest_timestamp):
+    timestamp_since = request.args.get('since', default=None)
+    timestamp_since = (datetime.now() - timedelta(hours = 3)) if timestamp_since is None else datetime.strptime(timestamp_since, DATETIME_FORMAT)
+    timestamp_since  = timestamp_since.replace(second=0, microsecond=0)
+
+    timestamp_to = request.args.get('to', default=None)
+    timestamp_to = datetime.now() if timestamp_to is None else datetime.strptime(timestamp_to, DATETIME_FORMAT)
+    timestamp_to  = timestamp_to.replace(second=0, microsecond=0)
+
+    if timestamp_since < earliest_timestamp:
+        timestamp_since = earliest_timestamp
+
+    if (timestamp_to < timestamp_since):
+        return (datetime.now() - timedelta(hours = 3)), datetime.now()
+
+    return timestamp_since, timestamp_to
+
+
 @servers.route("/server/<id>")
 def server_details(id: int):
     server = Server.query.get(id)
-    timestamp_since = request.args.get('since', default=None)
-    timestamp_since = (datetime.now() - timedelta(hours = 3)) if timestamp_since is None else datetime.strptime(timestamp_since, DATETIME_FORMAT)
-    timestamp_to = request.args.get('to', default=None)
-    timestamp_to = datetime.now() if timestamp_to is None else datetime.strptime(timestamp_to, DATETIME_FORMAT)
+    earliest_timestamp = earliest_timestamp = ServerData.query.filter_by(server_id=id).order_by(ServerData.timestamp).first().timestamp
+    timestamp_since, timestamp_to = get_timestamps(request, earliest_timestamp)
     # @TODO: Add generalization of data for higher timeframes
     values = (ServerData
         .query
@@ -153,5 +169,7 @@ def server_details(id: int):
         "partials/server/details.html", 
         server=server, 
         labels=labels, 
-        server_data_response=server_data_response
+        server_data_response=server_data_response,
+        since=timestamp_since,
+        to=timestamp_to
     )

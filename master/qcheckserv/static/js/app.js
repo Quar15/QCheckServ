@@ -183,3 +183,8 @@ function updateFilterList() {
         filterListLinks[i].setAttribute("hx-vals", '{"since": "' + formatDate(ms) + '"}');
     }
 }
+
+function getInputVal(id) {
+    el = document.querySelector("#" + id);
+    return el.value;
+}

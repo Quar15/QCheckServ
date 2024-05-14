@@ -185,6 +185,26 @@ nav .menu a .tag {
     background-color: var(--background-main);
 }
 
+.info .filters {
+    display: flex;
+}
+
+.info .search-timeframe {
+    display: flex;
+    margin-left: 15px;
+    align-items: center;
+    margin: auto;
+}
+
+.info .search-timeframe label {
+    text-align: right;
+    margin: 0 15px;
+}
+
+.info .search-timeframe input {
+    width: 145px;
+}
+
 .filter-list {
     display: flex;
 }
