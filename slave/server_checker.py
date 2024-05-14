@@ -24,6 +24,8 @@ LOG_LEVEL = logging.INFO
 DATETIME_FORMAT = "%Y-%m-%d %H:%M"
 VERSION = 1
 
+BLACKLISTED_PARTITIONS = ['/snap/']
+
 logger = logging.getLogger(__name__)
 
 def gatherData():
@@ -41,6 +43,8 @@ def gatherData():
     data['mem_perc'] = psutil.virtual_memory().percent
     data['partitions'] = []
     for partition in psutil.disk_partitions():
+        if any(p in partition.mountpoint for p in BLACKLISTED_PARTITIONS):
+            continue
         data['partitions'].append({
             "mountpoint": partition.mountpoint, 
             "usage_perc": psutil.disk_usage(partition.mountpoint).percent,
