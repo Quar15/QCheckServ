@@ -31,21 +31,22 @@ mountpointData.forEach((mountpoint) => {
     mountpointTd.innerText = mountpoint["label"];
     tr.appendChild(mountpointTd);
 
-    if (mountpoint["data"][mountpoint["data"].length - 1]["usage_perc"] != 'ERROR') {
+    let mountpointIndex = 0;
+    if (mountpoint["data"][mountpointIndex]["usage_perc"] != 'ERROR') {
         let usedTd = document.createElement("td");
-        usedTd.innerText = padNum(mountpoint["data"][mountpoint["data"].length - 1]["usage_perc"].toFixed(2), 5) + '%';
+        usedTd.innerText = padNum(mountpoint["data"][mountpointIndex]["usage_perc"].toFixed(2), 5) + '%';
         tr.appendChild(usedTd);
     
         let usedGbTd = document.createElement("td");
-        usedGbTd.innerText = mountpoint["data"][mountpoint["data"].length - 1]["used"].toFixed(2) + ' GB';
+        usedGbTd.innerText = mountpoint["data"][mountpointIndex]["used"].toFixed(2) + ' GB';
         tr.appendChild(usedGbTd);
     
         let leftGbTd = document.createElement("td");
-        leftGbTd.innerText = mountpoint["data"][mountpoint["data"].length - 1]["left"].toFixed(2) + ' GB';
+        leftGbTd.innerText = mountpoint["data"][mountpointIndex]["left"].toFixed(2) + ' GB';
         tr.appendChild(leftGbTd);
     
         let totalGbTd = document.createElement("td");
-        totalGbTd.innerText = mountpoint["data"][mountpoint["data"].length - 1]["total"].toFixed(2) + ' GB';
+        totalGbTd.innerText = mountpoint["data"][mountpointIndex]["total"].toFixed(2) + ' GB';
         tr.appendChild(totalGbTd);
     }
 

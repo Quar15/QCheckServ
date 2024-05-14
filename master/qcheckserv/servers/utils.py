@@ -1,3 +1,5 @@
+import copy
+
 class ServerDataResponse():
 
     def __init__(self):
@@ -30,13 +32,13 @@ class ServerDataResponse():
         example_partition_data = []
         for partition in self.values_partitions:
             if partition != []:
-                example_partition_data = partition
+                example_partition_data = copy.deepcopy(partition)
                 break
         for i in range(len(example_partition_data)):
             example_partition_data[i]["usage_perc"] = "ERROR"
             example_partition_data[i]["used"] = "ERROR"
             example_partition_data[i]["total"] = "ERROR"
-
+        
         for i in range(len(self.values_partitions)):
-            if self.values_partitions[i] == []:
+            if not self.values_partitions[i]:
                 self.values_partitions[i] = example_partition_data
