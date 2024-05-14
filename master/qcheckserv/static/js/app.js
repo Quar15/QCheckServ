@@ -129,8 +129,6 @@ function createConfig(labelText, dataLabels, dataValues, yAxisUnit = '%') {
                         }
                     },
                     offsetAfterAutoskip: true,
-                    // min: '2020-01-01 08:00:00',
-                    // max: '2020-01-01 09:00:00',
                     ticks: {
                         source: 'labels',
                         minRotation: 45

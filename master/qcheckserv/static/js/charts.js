@@ -9,8 +9,6 @@ var mountpointData = [];
 valuesPartitions[valuesPartitions.length-1].forEach((mountpoint) => {
     mountpointData.push({label: mountpoint["mountpoint"], data: [], graph_data: []});
 });
-console.log(valuesPartitions[0]);
-console.log(mountpointData);
 for (let i = 0; i < valuesPartitions.length; i++) {
     for (let j = 0; j < valuesPartitions[i].length; j++) {
         mountpointData[j]["data"].push({
@@ -110,6 +108,5 @@ charts.forEach((chart) => {
 addLineToChart(lineChartCpu, 'transparent', 25);
 addLineToChart(lineChartMemory, 'transparent', 25);
 addLineToChart(lineChartStorage, 'transparent', 25);
-
 
 updateFilterList();
