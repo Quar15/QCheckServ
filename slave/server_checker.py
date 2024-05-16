@@ -22,7 +22,7 @@ REPEAT_AFTER_SEND_FAILURE_TIMEOUT = int(os.getenv("QCHECKSERV_REPEAT_AFTER_SEND_
 
 LOG_LEVEL = logging.INFO
 DATETIME_FORMAT = "%Y-%m-%d %H:%M"
-VERSION = 1
+SERVER_CHECKER_PAYLOAD_VERSION = 2
 
 BLACKLISTED_PARTITIONS = ['/snap/']
 
@@ -35,7 +35,7 @@ def gatherData():
     else:
         data = {}
 
-    data['version'] = VERSION
+    data['version'] = SERVER_CHECKER_PAYLOAD_VERSION
     data['timestamp'] = datetime.datetime.now().strftime(DATETIME_FORMAT)
     data['hostname'] = socket.gethostname()
     data['cpu_perc'] = psutil.cpu_percent(4)
@@ -45,11 +45,14 @@ def gatherData():
     for partition in psutil.disk_partitions():
         if any(p in partition.mountpoint for p in BLACKLISTED_PARTITIONS):
             continue
+        inodes_data = os.statvfs(partition.mountpoint)
         data['partitions'].append({
             "mountpoint": partition.mountpoint, 
             "usage_perc": psutil.disk_usage(partition.mountpoint).percent,
             "used": psutil.disk_usage(partition.mountpoint).used,
             "total": psutil.disk_usage(partition.mountpoint).total,
+            "inodes_free": inodes_data.f_ffree,
+            "inodes_files": inodes_data.f_files,
         })
 
     net_io_counters = psutil.net_io_counters()

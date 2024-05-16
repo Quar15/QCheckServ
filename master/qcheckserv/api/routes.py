@@ -9,6 +9,9 @@ api = Blueprint('api', __name__)
 
 DATETIME_FORMAT = "%Y-%m-%d %H:%M"
 
+SERVER_CHECKER_PAYLOAD_VERSION = 2
+
+VERSION = 'version'
 TIMESTAMP = 'timestamp'
 HOSTNAME = 'hostname'
 CPU_PERC = 'cpu_perc'
@@ -17,6 +20,8 @@ MEM_PERC = 'mem_perc'
 PARTITIONS = 'partitions'
 BYTES_RECEIVED = 'bytes_received'
 BYTES_SENT = 'bytes_sent'
+INODES_FREE = 'inodes_free'
+INODES_FILES = 'inodes_files'
 
 
 def handle_initial_request(request, req_elements):
@@ -26,6 +31,8 @@ def handle_initial_request(request, req_elements):
         data = json.loads(request.data)
     except json.decoder.JSONDecodeError:
         return False, '400', 400
+    if VERSION in data and data[VERSION] != SERVER_CHECKER_PAYLOAD_VERSION:
+            return False, f"Old version of checker", 400
     for e in req_elements:
         if e not in data:
             return False, f"Missing '{e}'", 401
@@ -34,7 +41,7 @@ def handle_initial_request(request, req_elements):
 
 @api.route("/api/gather/server", methods=['POST'])
 def gather_server_data():
-    req_elements = [TIMESTAMP, HOSTNAME, CPU_PERC, LOADAVG, MEM_PERC, PARTITIONS, BYTES_RECEIVED, BYTES_SENT]
+    req_elements = [VERSION, TIMESTAMP, HOSTNAME, CPU_PERC, LOADAVG, MEM_PERC, PARTITIONS, BYTES_RECEIVED, BYTES_SENT, INODES_FREE, INODES_FILES]
     success, data, status_code = handle_initial_request(request, req_elements)
     if not success:
         return data, status_code
