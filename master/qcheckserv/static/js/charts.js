@@ -52,7 +52,6 @@ mountpointData.forEach((mountpoint) => {
         tr.appendChild(totalGbTd);
 
         let inodeUsageTd = document.createElement("td");
-        console.log(lastMountpointData["inodes_files"], lastMountpointData["inodes_free"])
         if (lastMountpointData["inodes_free"] > 0) {
             inodeUsageTd.innerText = ((lastMountpointData["inodes_files"] - lastMountpointData["inodes_free"] ) / lastMountpointData["inodes_files"]).toFixed(2) + '%';
         } else {
