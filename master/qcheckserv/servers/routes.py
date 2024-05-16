@@ -164,6 +164,7 @@ def server_details(id: int):
                 value_for_datetime = val
                 break
         server_data_response.append_value(value_for_datetime)
+    print(server_data_response)
     server_data_response.try_to_fix_partitions_data()
     return render_template(
         "partials/server/details.html", 

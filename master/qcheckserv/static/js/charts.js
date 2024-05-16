@@ -15,7 +15,9 @@ for (let i = 0; i < valuesPartitions.length; i++) {
             "usage_perc": valuesPartitions[i][j]["usage_perc"],
             "total": valuesPartitions[i][j]["total"] / 1024 / 1024 / 1024,
             "used": valuesPartitions[i][j]["used"] / 1024 / 1024 / 1024,
-            "left": (valuesPartitions[i][j]["total"] - valuesPartitions[i][j]["used"]) / 1024 / 1024 / 1024
+            "left": (valuesPartitions[i][j]["total"] - valuesPartitions[i][j]["used"]) / 1024 / 1024 / 1024,
+            "inodes_files": valuesPartitions[i][j]["inodes_files"],
+            "inodes_free": valuesPartitions[i][j]["inodes_free"]
         });
         mountpointData[j]["graph_data"].push(valuesPartitions[i][j]["usage_perc"]);
     }
@@ -31,21 +33,34 @@ mountpointData.forEach((mountpoint) => {
 
     let mountpointIndex = 0;
     if (mountpoint["data"][mountpointIndex]["usage_perc"] != 'ERROR') {
+        let lastMountpointData = mountpoint["data"][mountpointIndex];
+
         let usedTd = document.createElement("td");
-        usedTd.innerText = padNum(mountpoint["data"][mountpointIndex]["usage_perc"].toFixed(2), 5) + '%';
+        usedTd.innerText = padNum(lastMountpointData["usage_perc"].toFixed(2), 5) + '%';
         tr.appendChild(usedTd);
     
         let usedGbTd = document.createElement("td");
-        usedGbTd.innerText = mountpoint["data"][mountpointIndex]["used"].toFixed(2) + ' GB';
+        usedGbTd.innerText = lastMountpointData["used"].toFixed(2) + ' GB';
         tr.appendChild(usedGbTd);
     
         let leftGbTd = document.createElement("td");
-        leftGbTd.innerText = mountpoint["data"][mountpointIndex]["left"].toFixed(2) + ' GB';
+        leftGbTd.innerText = lastMountpointData["left"].toFixed(2) + ' GB';
         tr.appendChild(leftGbTd);
-    
+
         let totalGbTd = document.createElement("td");
-        totalGbTd.innerText = mountpoint["data"][mountpointIndex]["total"].toFixed(2) + ' GB';
+        totalGbTd.innerText = lastMountpointData["total"].toFixed(2) + ' GB';
         tr.appendChild(totalGbTd);
+
+        let inodeUsageTd = document.createElement("td");
+        console.log(lastMountpointData["inodes_files"], lastMountpointData["inodes_free"])
+        if (lastMountpointData["inodes_free"] > 0) {
+            inodeUsageTd.innerText = ((lastMountpointData["inodes_files"] - lastMountpointData["inodes_free"] ) / lastMountpointData["inodes_files"]).toFixed(2) + '%';
+        } else {
+            inodeUsageTd.innerText = "-";
+        }
+        
+        tr.appendChild(inodeUsageTd);
+
     }
 
     storageListTable.appendChild(tr);

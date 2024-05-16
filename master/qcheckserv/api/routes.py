@@ -20,8 +20,6 @@ MEM_PERC = 'mem_perc'
 PARTITIONS = 'partitions'
 BYTES_RECEIVED = 'bytes_received'
 BYTES_SENT = 'bytes_sent'
-INODES_FREE = 'inodes_free'
-INODES_FILES = 'inodes_files'
 
 
 def handle_initial_request(request, req_elements):
@@ -41,7 +39,7 @@ def handle_initial_request(request, req_elements):
 
 @api.route("/api/gather/server", methods=['POST'])
 def gather_server_data():
-    req_elements = [VERSION, TIMESTAMP, HOSTNAME, CPU_PERC, LOADAVG, MEM_PERC, PARTITIONS, BYTES_RECEIVED, BYTES_SENT, INODES_FREE, INODES_FILES]
+    req_elements = [VERSION, TIMESTAMP, HOSTNAME, CPU_PERC, LOADAVG, MEM_PERC, PARTITIONS, BYTES_RECEIVED, BYTES_SENT]
     success, data, status_code = handle_initial_request(request, req_elements)
     if not success:
         return data, status_code
