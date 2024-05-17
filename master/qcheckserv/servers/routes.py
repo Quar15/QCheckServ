@@ -13,6 +13,7 @@ DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 
 @servers.route("/server-list")
+@login_required
 def server_list():
     server_groups = ServerGroup.query.all()
     servers = Server.query.all()
@@ -21,12 +22,14 @@ def server_list():
 
 
 @servers.route("/server/group/list")
+@login_required
 def server_group_list():
     server_groups = ServerGroup.query.all()
     return render_template("partials/server/group/list.html", server_groups=server_groups)
 
 
 @servers.route("/server/group/<id>/delete")
+@login_required
 def server_group_list_delete(id: int):
     group = ServerGroup.query.get_or_404(id)
     group_name = group.name
@@ -37,6 +40,7 @@ def server_group_list_delete(id: int):
 
 
 @servers.route("/server/group/<id>/edit", methods=['POST', 'GET'])
+@login_required
 def server_group_list_edit(id: int):
     server_group = ServerGroup.query.get_or_404(id)
     servers = Server.query.all()
@@ -76,6 +80,7 @@ def server_group_list_edit(id: int):
 
 
 @servers.route("/server/group/create", methods=['POST', 'GET'])
+@login_required
 def server_group_list_create():
     servers = Server.query.all()
     for s in servers:
@@ -139,6 +144,7 @@ def get_timestamps(request, earliest_timestamp):
 
 
 @servers.route("/server/<id>")
+@login_required
 def server_details(id: int):
     server = Server.query.get(id)
     earliest_timestamp = earliest_timestamp = ServerData.query.filter_by(server_id=id).order_by(ServerData.timestamp).first().timestamp

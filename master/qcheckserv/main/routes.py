@@ -12,6 +12,7 @@ def heartbeat():
 
 
 @main.route("/")
+@login_required
 def index():
     n_hosts = Server.query.count()
     n_groups = ServerGroup.query.count()

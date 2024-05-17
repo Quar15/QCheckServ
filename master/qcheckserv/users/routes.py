@@ -10,6 +10,7 @@ users = Blueprint('users', __name__)
 
 
 @users.route("/users/partial/list", methods=['GET', 'POST'])
+@login_required
 def user_list():
     page = request.args.get('page', 1, type=int)
     users = User.query.order_by(User.id).paginate(page=page, per_page=50)
@@ -17,6 +18,7 @@ def user_list():
 
 
 @users.route("/users/<id>/edit", methods=['GET', 'POST'])
+@login_required
 def user_edit(id: int):
     user = User.query.get_or_404(id)
     form = UserEditForm()
@@ -26,6 +28,7 @@ def user_edit(id: int):
             user.password = hashed_password
         user.username = form.username.data
         user.pretty_name = form.pretty_name.data
+        user.role=form.user_role.data
         db.session.commit()
         flash(f"Account '{user.username}' has been updated", 'success')
         return redirect(url_for('main.index', list="users"))
@@ -33,6 +36,7 @@ def user_edit(id: int):
         form.user_id.data = user.id
         form.username.data = user.username
         form.pretty_name.data = user.pretty_name
+        form.user_role.data = user.role.name
     n_hosts = Server.query.count()
     n_groups = ServerGroup.query.count()
     n_users = User.query.count()
@@ -48,6 +52,7 @@ def user_edit(id: int):
 
 
 @users.route("/users/<id>/delete", methods=['GET', 'POST'])
+@login_required
 def user_delete(id: int):
     user = User.query.get_or_404(id)
     if user.id == current_user.id:
@@ -61,11 +66,12 @@ def user_delete(id: int):
 
 
 @users.route("/users/create", methods=['GET', 'POST'])
+@login_required
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(username=form.username.data, pretty_name=form.pretty_name.data, password=hashed_password)
+        user = User(username=form.username.data, pretty_name=form.pretty_name.data, password=hashed_password, role=form.user_role.data)
         db.session.add(user)
         db.session.commit()
         flash(f"Account '{user.username}' created", 'success')
@@ -101,6 +107,7 @@ def login():
 
 
 @users.route("/logout")
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('users.login'))

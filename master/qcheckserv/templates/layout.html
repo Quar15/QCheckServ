@@ -29,7 +29,9 @@
             <a href="#" class="wip"><i class='bx bxl-docker'></i>Containers (0)<div class="tag">WIP</div></a>
             <a href="#" class="wip"><i class='bx bx-data'></i>Databases (0)<div class="tag">WIP</div></a>
             <a href="#" class="wip"><i class='bx bx-bell'></i>Alerts (0)<div class="tag">WIP</div></a>
-            <a href="{{ url_for('main.index', list='users') }}"><i class='bx bx-group'></i>Users ({{ n_users }})</a>
+            {% if current_user.role == 1 %}
+                <a href="{{ url_for('main.index', list='users') }}"><i class='bx bx-group'></i>Users ({{ n_users }})</a>
+            {% endif %}
         </div>
     </nav>
     <div class="wrapper" id="wrapper">

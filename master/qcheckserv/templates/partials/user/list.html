@@ -11,12 +11,14 @@
                     <tr>
                         <th>Name</th>
                         <th>Username</th>
+                        <th>Role</th>
                         <th></th>
                     </tr>
                     {% for user in users.items %}
                         <tr>
                             <td>{{ user.pretty_name }}</td>
                             <td>{{ user.username }}</td>
+                            <td>{{ user.role }}</td>
                             <td>
                                 <a href="{{ url_for('users.user_edit', id=user.id) }}"><i class='bx bx-edit-alt'></i></a>
                                 <i class='bx bxs-trash' hx-get="{{ url_for('users.user_delete', id=user.id) }}" hx-target="#wrapper" hx-confirm="Delete user '{{ user.pretty_name }}'?"></i>
@@ -29,4 +31,5 @@
     </div>
 </div>
 <script src="{{ url_for('static', filename='js/accordion.js') }}"></script>
+<script>translateUserRoleEnum(3);</script>
 <script>updateNavFocus('users');</script>

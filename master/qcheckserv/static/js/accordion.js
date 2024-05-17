@@ -16,28 +16,30 @@ headers[headers.length - 1].click();
 let searchBar = document.querySelector("#server-search");
 let listGroups = document.querySelectorAll(".list-group");
 let tableRecords = document.querySelectorAll(".list-group .item-content td:nth-child(1)");
-searchBar.addEventListener("keyup", () => {
-    let searchContent = searchBar.value.toLowerCase();
-    let re = new RegExp(".*" + searchContent + ".*");
-    tableRecords.forEach(e => {
-        if (! e.innerText.toLowerCase().match(re)) {
-            e.parentElement.classList.add("unfiltered");
-        } else {
-            e.parentElement.classList.remove("unfiltered");
-        }
-    });
-    listGroups.forEach(group => {
-        let tableRows = group.querySelectorAll("tr:has(td)");
-        let unfilteredRowsCount = 0;
-        tableRows.forEach((r) => {
-            if (r.classList.contains("unfiltered")) {
-                unfilteredRowsCount++;
+if (searchBar) {
+    searchBar.addEventListener("keyup", () => {
+        let searchContent = searchBar.value.toLowerCase();
+        let re = new RegExp(".*" + searchContent + ".*");
+        tableRecords.forEach(e => {
+            if (! e.innerText.toLowerCase().match(re)) {
+                e.parentElement.classList.add("unfiltered");
+            } else {
+                e.parentElement.classList.remove("unfiltered");
             }
         });
-        if (unfilteredRowsCount === tableRows.length) {
-            group.classList.add("unfiltered");
-        } else {
-            group.classList.remove("unfiltered");
-        }
+        listGroups.forEach(group => {
+            let tableRows = group.querySelectorAll("tr:has(td)");
+            let unfilteredRowsCount = 0;
+            tableRows.forEach((r) => {
+                if (r.classList.contains("unfiltered")) {
+                    unfilteredRowsCount++;
+                }
+            });
+            if (unfilteredRowsCount === tableRows.length) {
+                group.classList.add("unfiltered");
+            } else {
+                group.classList.remove("unfiltered");
+            }
+        });
     });
-});
+}

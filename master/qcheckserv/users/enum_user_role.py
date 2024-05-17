@@ -1,6 +1,7 @@
-from enum import Enum
+from enum import IntEnum
 
-class EnumUserRole(Enum):
+
+class EnumUserRole(IntEnum):
 
     USER = 0
     ADMIN = 1

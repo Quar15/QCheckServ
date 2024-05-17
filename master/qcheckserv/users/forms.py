@@ -1,8 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, HiddenField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, HiddenField, SelectField
 from wtforms.validators import DataRequired, EqualTo, Length, ValidationError
 from flask_login import current_user
 from qcheckserv.users.models import User
+from qcheckserv.users.enum_user_role import EnumUserRole
 
 
 class RegistrationForm(FlaskForm):
@@ -13,6 +14,7 @@ class RegistrationForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password',
                                      validators=[DataRequired(), EqualTo('password')])
+    user_role = SelectField('Role', choices=[(role.name, role.name) for i, role in enumerate(EnumUserRole)])
     submit = SubmitField('Create')
 
     def validate_username(self, username):
@@ -35,6 +37,7 @@ class UserEditForm(FlaskForm):
     password = PasswordField('Password', validators=[])
     confirm_password = PasswordField('Confirm Password',
                                      validators=[EqualTo('password')])
+    user_role = SelectField('Role', choices=[(role.name, role.name) for i, role in enumerate(EnumUserRole)])
     submit = SubmitField('Update')
 
     def validate_username(self, username):
