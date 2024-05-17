@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://unpkg.com/htmx.org@1.6.1"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.4.1/dist/chart.js"></script>
@@ -23,12 +24,12 @@
             <img src="{{ url_for('static', filename='img/logo.png') }}" alt="QCheckServ">
         </div>
         <div class="menu">
-            <a href="{{ url_for('main.index', list='servers') }}"><i class='bx bxs-component'></i>Hosts ({{ n_hosts }})<div class="tag">BETA</div></a>
-            <a href="{{ url_for('main.index', list='groups') }}"><i class='bx bx-box'></i>Groups ({{ n_groups }})<div class="tag">BETA</div></a>
+            <a href="{{ url_for('main.index', list='servers') }}"><i class='bx bxs-component'></i>Hosts ({{ n_hosts }})</a>
+            <a href="{{ url_for('main.index', list='groups') }}"><i class='bx bx-box'></i>Groups ({{ n_groups }})</a>
             <a href="#" class="wip"><i class='bx bxl-docker'></i>Containers (0)<div class="tag">WIP</div></a>
             <a href="#" class="wip"><i class='bx bx-data'></i>Databases (0)<div class="tag">WIP</div></a>
             <a href="#" class="wip"><i class='bx bx-bell'></i>Alerts (0)<div class="tag">WIP</div></a>
-            <a href="{{ url_for('main.index', list='users') }}"><i class='bx bx-group'></i>Users ({{ n_users }})<div class="tag">BETA</div></a>
+            <a href="{{ url_for('main.index', list='users') }}"><i class='bx bx-group'></i>Users ({{ n_users }})</a>
         </div>
     </nav>
     <div class="wrapper" id="wrapper">

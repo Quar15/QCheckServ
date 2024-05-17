@@ -243,6 +243,12 @@ nav .menu a .tag {
 
 .storage-list table td {
     padding: 5px 0;
+    font-family: "Roboto Mono";
+    text-align: right;
+}
+
+.storage-list table td:nth-child(1) {
+    text-align: center;
 }
 
 .process-list {
@@ -340,6 +346,10 @@ nav .menu a .tag {
     padding: 15px;
     text-align: center;
     border-bottom: 1px solid var(--text-main);
+}
+
+.list-group .item-content table td {
+    font-family: "Roboto Mono";
 }
 
 .list-group .item-content table tr:hover td{
