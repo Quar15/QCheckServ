@@ -31,7 +31,7 @@ def user_edit(id: int):
         user.role=form.user_role.data
         db.session.commit()
         flash(f"Account '{user.username}' has been updated", 'success')
-        return redirect(url_for('main.index', list="users"))
+        return redirect(url_for('users.user_list', list="users"))
     elif request.method == 'GET':
         form.user_id.data = user.id
         form.username.data = user.username
@@ -75,7 +75,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         flash(f"Account '{user.username}' created", 'success')
-        return redirect(url_for('main.index'))
+        return redirect(url_for('users.user_list'))
     n_hosts = Server.query.count()
     n_groups = ServerGroup.query.count()
     n_users = User.query.count()
@@ -100,6 +100,7 @@ def login():
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
+            flash(f'Logged in as {user.pretty_name}', 'success')
             return redirect(next_page) if next_page else redirect(url_for('main.index'))
         else:
             flash('Login Unsuccessful. Please check username and password', 'danger')

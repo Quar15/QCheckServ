@@ -201,3 +201,12 @@ function getInputVal(id) {
     el = document.querySelector("#" + id);
     return el.value;
 }
+
+function hideOnClick(selector) {
+    let elements = document.querySelectorAll(selector);
+    elements.forEach((e) => {
+        e.addEventListener('click', ()=> {
+            e.classList.add("hidden");
+        })
+    });
+}

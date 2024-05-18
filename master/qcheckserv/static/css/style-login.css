@@ -1,0 +1,113 @@
+:root{
+    --background-main: #222;
+    --background-hover: #444;
+    --text-main: #EEE;
+    --highlight: rgb(99, 255, 132);
+    --highlight-alt: rgba(99, 255, 132, 0.2);
+    --highlight-disabled: rgb(34, 85, 45);
+    --error: #F00;
+}
+
+body {
+    background-color: var(--background-main);
+    color: var(--text-main);
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    display: flex;
+    margin: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+.btn, input, fieldset {
+    margin: 5px;
+    padding: 10px 15px;
+    border: 1px solid var(--highlight);
+    border-radius: 5px;
+    font-family: "Montserrat", sans-serif;
+    background-color: var(--background-main);
+    color: var(--text-main);
+}
+
+.btn:hover {
+    background-color: var(--highlight);
+    color: var(--background-main);
+    cursor: pointer;
+}
+
+.notifications {
+    position: fixed;
+    top: 0;
+    right: 0;
+    color: var(--text-main);
+    max-width: 350px;
+}
+
+.notifications .notification {
+    background-color: var(--background-main);
+    padding: 15px;
+    margin: 15px;
+    border: 1px solid var(--highlight);
+    border-left: 8px solid var(--highlight);
+    border-radius: 3px;
+}
+
+.notifications .notification.warning {
+    border: 1px solid var(--warning);
+    border-left: 8px solid var(--warning);
+}
+
+.notifications .notification.error {
+    border: 1px solid var(--error);
+    border-left: 8px solid var(--error);
+}
+
+.notifications .notification:hover {
+    cursor: pointer;
+    background-color: var(--background-hover);
+}
+
+.wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.wrapper form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.wrapper form .form-control-label {
+    display: inline-block;
+    width: 100px;
+}
+
+.wrapper form .form-check {
+    margin: 10px;
+}
+
+.wrapper form .form-group:has(.btn) {
+    width: 100%;
+}
+
+.wrapper form .form-group .btn {
+    width: 100%;
+}
+
+.wrapper form input[type=checkbox] {
+    height: 16px;
+    width: 16px;
+}
+
+.wrapper form img {
+    width: 128px;
+    margin: 16px;
+}
+

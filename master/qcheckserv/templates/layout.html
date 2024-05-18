@@ -33,10 +33,24 @@
                 <a href="{{ url_for('main.index', list='users') }}"><i class='bx bx-group'></i>Users ({{ n_users }})</a>
             {% endif %}
         </div>
+        <div class="logout">
+            <a href="{{ url_for('users.logout') }}"><i class='bx bx-exit'></i>Logout</a>
+        </div>
     </nav>
     <div class="wrapper" id="wrapper">
         {% block content %}{% endblock %}
     </div>
+    <div class="notifications">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="notification {{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+    <script>hideOnClick(".notifications .notification");</script>
 </body>
-
 </html>
