@@ -1,4 +1,4 @@
-let headers = document.querySelectorAll(".list-group .item-header");
+headers = document.querySelectorAll(".list-group .item-header");
 
 headers.forEach(header => {
     header.addEventListener("click", () => {
@@ -13,9 +13,9 @@ headers.forEach(header => {
 
 headers[headers.length - 1].click();
 
-let searchBar = document.querySelector("#server-search");
-let listGroups = document.querySelectorAll(".list-group");
-let tableRecords = document.querySelectorAll(".list-group .item-content td:nth-child(1)");
+searchBar = document.querySelector("#server-search");
+listGroups = document.querySelectorAll(".list-group");
+tableRecords = document.querySelectorAll(".list-group .item-content td:nth-child(1)");
 if (searchBar) {
     searchBar.addEventListener("keyup", () => {
         let searchContent = searchBar.value.toLowerCase();

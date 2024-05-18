@@ -1,10 +1,11 @@
-from flask import render_template, Blueprint, request, url_for, redirect, flash
+from flask import render_template, Blueprint, request, url_for, redirect, flash, session, make_response
 from flask_login import login_required
 from wtforms import BooleanField, StringField
 from qcheckserv import db
 from qcheckserv.servers.models import Server, ServerData, ServerGroup
 from qcheckserv.servers.forms import ServerGroupCreationForm
 from qcheckserv.servers.utils import ServerDataResponse
+from qcheckserv.main.utils import add_notification_refresh_header, admin_required
 from qcheckserv.users.models import User
 from datetime import datetime, timedelta
 
@@ -14,6 +15,7 @@ DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 @servers.route("/server-list")
 @login_required
+@add_notification_refresh_header
 def server_list():
     server_groups = ServerGroup.query.all()
     servers = Server.query.all()
@@ -23,6 +25,7 @@ def server_list():
 
 @servers.route("/server/group/list")
 @login_required
+@add_notification_refresh_header
 def server_group_list():
     server_groups = ServerGroup.query.all()
     return render_template("partials/server/group/list.html", server_groups=server_groups)
@@ -30,17 +33,20 @@ def server_group_list():
 
 @servers.route("/server/group/<id>/delete")
 @login_required
+@admin_required
 def server_group_list_delete(id: int):
     group = ServerGroup.query.get_or_404(id)
     group_name = group.name
     db.session.delete(group)
     db.session.commit()
     flash(f"Group '{group_name}' has been deleted", 'success')
+    session['flash_message_available'] = True
     return redirect(url_for('servers.server_group_list'))
 
 
 @servers.route("/server/group/<id>/edit", methods=['POST', 'GET'])
 @login_required
+@admin_required
 def server_group_list_edit(id: int):
     server_group = ServerGroup.query.get_or_404(id)
     servers = Server.query.all()
@@ -63,13 +69,14 @@ def server_group_list_edit(id: int):
         form.server_group_id.data = server_group.id
         form.name.data = server_group.name
         servers = Server.query.all()
+        form.submit.label.text = 'Update'
     
     n_hosts = Server.query.count()
     n_groups = ServerGroup.query.count()
     n_users = User.query.count()
     return render_template(
-        'servers/create_group.html', 
-        title='Update Group', 
+        'servers/create_group.html',
+        title='Update Group',
         form=form,
         action_url=url_for('servers.server_group_list_edit', id=server_group.id),
         servers=servers,
@@ -81,6 +88,7 @@ def server_group_list_edit(id: int):
 
 @servers.route("/server/group/create", methods=['POST', 'GET'])
 @login_required
+@admin_required
 def server_group_list_create():
     servers = Server.query.all()
     for s in servers:
@@ -100,8 +108,8 @@ def server_group_list_create():
     n_groups = ServerGroup.query.count()
     n_users = User.query.count()
     return render_template(
-        'servers/create_group.html', 
-        title='Create Group', 
+        'servers/create_group.html',
+        title='Create Group',
         form=form,
         action_url=url_for('servers.server_group_list_create'),
         servers=servers,

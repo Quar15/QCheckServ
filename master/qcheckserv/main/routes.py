@@ -1,4 +1,4 @@
-from flask import render_template, Blueprint, request, url_for
+from flask import render_template, Blueprint, request, url_for, make_response, flash
 from flask_login import login_required
 from qcheckserv.servers.models import Server, ServerData, ServerGroup
 from qcheckserv.users.models import User
@@ -33,3 +33,16 @@ def index():
         n_users=n_users,
         hx_get_list_url=hx_get_list_url,
     )
+
+
+@main.route("/notifications")
+def notifications():
+    return render_template("partials/notifications.html")
+
+
+@main.route("/test/notifications", methods=['POST'])
+def test_notifications():
+    res = make_response("", 204)
+    res.headers["HX-Trigger"] = "newNotification"
+    flash("Notifications are working")
+    return res

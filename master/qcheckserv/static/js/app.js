@@ -185,7 +185,6 @@ function updateFilterList() {
 function translateUserRoleEnum(columnIndex) {
     tdListToTranslate = document.querySelectorAll(".item-groups .table-wrapper table td:nth-child(" + columnIndex + ")");
     tdListToTranslate.forEach((td) => {
-        console.log(td.innerText);
         switch (td.innerText) {
             case '1':
                 td.innerText = "ADMIN";

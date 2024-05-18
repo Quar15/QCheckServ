@@ -5,7 +5,9 @@
             <div class="icon">+</div>
         </div>
         <div class="item-content">
-            <a class="btn" href="{{ url_for('users.register') }}">Create new user</a>
+            {% if current_user.role == 1 %}
+                <a class="btn" href="{{ url_for('users.register') }}">Create new user</a>
+            {% endif %}
             <div class="table-wrapper">
                 <table>
                     <tr>
@@ -20,8 +22,10 @@
                             <td>{{ user.username }}</td>
                             <td>{{ user.role }}</td>
                             <td>
+                                {% if current_user.role == 1 %}
                                 <a href="{{ url_for('users.user_edit', id=user.id) }}"><i class='bx bx-edit-alt'></i></a>
                                 <i class='bx bxs-trash' hx-get="{{ url_for('users.user_delete', id=user.id) }}" hx-target="#wrapper" hx-confirm="Delete user '{{ user.pretty_name }}'?"></i>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}

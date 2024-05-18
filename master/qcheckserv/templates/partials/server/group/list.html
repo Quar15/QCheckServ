@@ -5,7 +5,9 @@
             <div class="icon">+</div>
         </div>
         <div class="item-content">
-            <a class="btn" href="{{ url_for('servers.server_group_list_create') }}">Create new group</a>
+            {% if current_user.role == 1 %}
+                <a class="btn" href="{{ url_for('servers.server_group_list_create') }}">Create new group</a>
+            {% endif %}
             <div class="table-wrapper">
                 <table>
                     <tr>
@@ -18,8 +20,10 @@
                             <td>{{ group.name }}</td>
                             <td>{{ group.servers | length }}</td>
                             <td>
-                                <a href="{{ url_for('servers.server_group_list_edit', id=group.id) }}"><i class='bx bx-edit-alt'></i></a>
-                                <i class='bx bxs-trash' hx-get="{{ url_for('servers.server_group_list_delete', id=group.id) }}" hx-target="#wrapper" hx-confirm="Delete group '{{ group.name }}'?"></i>
+                                {% if current_user.role == 1 %}
+                                    <a href="{{ url_for('servers.server_group_list_edit', id=group.id) }}"><i class='bx bx-edit-alt'></i></a>
+                                    <i class='bx bxs-trash' hx-get="{{ url_for('servers.server_group_list_delete', id=group.id) }}" hx-target="#wrapper" hx-confirm="Delete group '{{ group.name }}'?"></i>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}

@@ -50,16 +50,6 @@
             </div>
         </form>
     </div>
-    <div class="notifications">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-              {% for category, message in messages %}
-                <div class="notification {{ category }}">
-                  {{ message }}
-                </div>
-              {% endfor %}
-            {% endif %}
-          {% endwith %}
-    </div>
+    {% include 'partials/notifications.html' %}
 </body>
 </html>

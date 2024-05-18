@@ -1,9 +1,10 @@
-from flask import render_template, url_for, flash, redirect, request, Blueprint
+from flask import render_template, url_for, flash, redirect, request, Blueprint, session
 from flask_login import login_user, current_user, logout_user, login_required
 from qcheckserv import db, bcrypt
 from qcheckserv.users.models import User
 from qcheckserv.servers.models import Server, ServerGroup
 from qcheckserv.users.forms import LoginForm, RegistrationForm, UserEditForm
+from qcheckserv.main.utils import add_notification_refresh_header, admin_required
 
 
 users = Blueprint('users', __name__)
@@ -11,6 +12,7 @@ users = Blueprint('users', __name__)
 
 @users.route("/users/partial/list", methods=['GET', 'POST'])
 @login_required
+@add_notification_refresh_header
 def user_list():
     page = request.args.get('page', 1, type=int)
     users = User.query.order_by(User.id).paginate(page=page, per_page=50)
@@ -19,6 +21,7 @@ def user_list():
 
 @users.route("/users/<id>/edit", methods=['GET', 'POST'])
 @login_required
+@admin_required
 def user_edit(id: int):
     user = User.query.get_or_404(id)
     form = UserEditForm()
@@ -31,7 +34,7 @@ def user_edit(id: int):
         user.role=form.user_role.data
         db.session.commit()
         flash(f"Account '{user.username}' has been updated", 'success')
-        return redirect(url_for('users.user_list', list="users"))
+        return redirect(url_for('main.index', list="users"))
     elif request.method == 'GET':
         form.user_id.data = user.id
         form.username.data = user.username
@@ -53,6 +56,7 @@ def user_edit(id: int):
 
 @users.route("/users/<id>/delete", methods=['GET', 'POST'])
 @login_required
+@admin_required
 def user_delete(id: int):
     user = User.query.get_or_404(id)
     if user.id == current_user.id:
@@ -62,11 +66,13 @@ def user_delete(id: int):
     db.session.delete(user)
     db.session.commit()
     flash(f"User '{user_name}' has been deleted", 'success')
+    session['flash_message_available'] = True
     return redirect(url_for('users.user_list'))
 
 
 @users.route("/users/create", methods=['GET', 'POST'])
 @login_required
+@admin_required
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
@@ -75,7 +81,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         flash(f"Account '{user.username}' created", 'success')
-        return redirect(url_for('users.user_list'))
+        return redirect(url_for('main.index', list="users"))
     n_hosts = Server.query.count()
     n_groups = ServerGroup.query.count()
     n_users = User.query.count()
