@@ -18,7 +18,7 @@ def add_notification_refresh_header(viewmethod):
     @wraps(viewmethod)
     def new_viewmethod(*args, **kwargs):
         resp = make_response(viewmethod(*args, **kwargs))
-        if session['flash_message_available']:
+        if 'flash_message_available' in session and session['flash_message_available']:
             resp.headers["HX-Trigger"] = "newNotification"
             session['flash_message_available'] = False
         return resp
