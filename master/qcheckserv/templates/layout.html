@@ -28,7 +28,7 @@
             <a href="{{ url_for('main.index', list='groups') }}"><i class='bx bx-box'></i>Groups ({{ n_groups }})</a>
             <a href="#" class="wip"><i class='bx bxl-docker'></i>Containers (0)<div class="tag">WIP</div></a>
             <a href="#" class="wip"><i class='bx bx-data'></i>Databases (0)<div class="tag">WIP</div></a>
-            <a href="#" class="wip"><i class='bx bx-bell'></i>Alerts (0)<div class="tag">WIP</div></a>
+            <a href="{{ url_for('main.index', list='alerts') }}"><i class='bx bx-bell'></i>Alerts (0)<div class="tag">BETA</div></a>
             {% if current_user.role == 1 %}
                 <a href="{{ url_for('main.index', list='users') }}"><i class='bx bx-group'></i>Users ({{ n_users }})</a>
             {% endif %}

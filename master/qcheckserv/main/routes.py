@@ -19,6 +19,8 @@ def index():
     n_users = User.query.count()
     list_to_show = request.args.get('list')
     match list_to_show:
+        case 'alerts':
+            hx_get_list_url = url_for('alerts.alerts_list')
         case 'groups':
             hx_get_list_url = url_for('servers.server_group_list')
         case 'users':

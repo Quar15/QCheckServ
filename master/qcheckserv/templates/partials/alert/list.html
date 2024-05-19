@@ -1,0 +1,60 @@
+<div class="item-groups">
+    <div class="list-group">
+        <div class="item-header">
+            <h2>Alert Definitions</h2>
+            <div class="icon">+</div>
+        </div>
+        <div class="item-content">
+            <div class="table-wrapper">
+                {% if current_user.role == 1 %}
+                    <a class="btn" href="{{ url_for('alerts.alert_definition_create') }}">Create new alert definition</a>
+                {% endif %}
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th></th>
+                    </tr>
+                    {% for alert_definition in alert_definitions %}
+                        <tr>
+                            <td>alert_definition.id</td>
+                            <td>
+                                {% if current_user.role == 1 %}
+                                    <a href="{{ url_for('alerts.alert_definition_edit', id=alert_definition.id) }}"><i class='bx bx-edit-alt'></i></a>
+                                    <i class='bx bxs-trash' hx-get="{{ url_for('alerts.alert_definition_delete', id=alert_definition.id) }}" hx-target="#wrapper" hx-confirm="Delete alert?"></i>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="list-group">
+        <div class="item-header">
+            <h2>Alerts</h2>
+            <div class="icon">+</div>
+        </div>
+        <div class="item-content">
+            <div class="table-wrapper">
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th></th>
+                    </tr>
+                    {% for alert in alerts %}
+                        <tr>
+                            <td>alert.id</td>
+                            <td>
+                                {% if current_user.role == 1 %}
+                                    <a href="{{ url_for('alerts.alert_acknowledge', id=alert.id) }}"><i class='bx bx-check-square'></i></a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='js/accordion.js') }}"></script>
+<script>updateNavFocus('alerts');</script>
