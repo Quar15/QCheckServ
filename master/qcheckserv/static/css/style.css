@@ -250,7 +250,7 @@ nav .menu a .tag {
     display: flex;
 }
 
-.filter-list a {
+.filter-list a, #is-data-live-toggle a {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -264,6 +264,17 @@ nav .menu a .tag {
     width: 25px;
     height: 25px;
     text-decoration: none;
+}
+
+.filter-list a:hover , #is-data-live-toggle a:hover {
+    cursor: pointer;
+    background-color: var(--background-hover);
+    border-color: var(--highlight);
+}
+
+.filter-list a.active, #is-data-live-toggle a.active {
+    background-color: var(--background-main);
+    border-color: var(--highlight);
 }
 
 .storage-list {

@@ -134,12 +134,21 @@ def get_labels_and_datetimes_in_timeframe(timestamp_since, timestamp_to):
 
 
 def get_timestamps(request, earliest_timestamp):
+    default_values = True
     timestamp_since = request.args.get('since', default=None)
-    timestamp_since = (datetime.now() - timedelta(hours = 3)) if timestamp_since is None else datetime.strptime(timestamp_since, DATETIME_FORMAT)
+    if timestamp_since is None:
+        timestamp_since = (datetime.now() - timedelta(hours = 3))
+    else:
+        timestamp_since = datetime.strptime(timestamp_since, DATETIME_FORMAT)
+        default_values = False
     timestamp_since  = timestamp_since.replace(second=0, microsecond=0)
 
     timestamp_to = request.args.get('to', default=None)
-    timestamp_to = datetime.now() if timestamp_to is None else datetime.strptime(timestamp_to, DATETIME_FORMAT)
+    if timestamp_to is None:
+        timestamp_to = datetime.now()
+    else:
+        timestamp_to = datetime.strptime(timestamp_to, DATETIME_FORMAT)
+        default_values = False
     timestamp_to  = timestamp_to.replace(second=0, microsecond=0)
 
     if timestamp_since < earliest_timestamp:
@@ -148,15 +157,15 @@ def get_timestamps(request, earliest_timestamp):
     if (timestamp_to < timestamp_since):
         return (datetime.now() - timedelta(hours = 3)), datetime.now()
 
-    return timestamp_since, timestamp_to
+    return timestamp_since, timestamp_to, default_values
 
 
 @servers.route("/server/<id>")
 @login_required
 def server_details(id: int):
     server = Server.query.get(id)
-    earliest_timestamp = earliest_timestamp = ServerData.query.filter_by(server_id=id).order_by(ServerData.timestamp).first().timestamp
-    timestamp_since, timestamp_to = get_timestamps(request, earliest_timestamp)
+    earliest_timestamp = ServerData.query.filter_by(server_id=id).order_by(ServerData.timestamp).first().timestamp
+    timestamp_since, timestamp_to, should_refresh_on_new_data = get_timestamps(request, earliest_timestamp)
     # @TODO: Add generalization of data for higher timeframes
     values = (ServerData
         .query
@@ -185,5 +194,32 @@ def server_details(id: int):
         labels=labels, 
         server_data_response=server_data_response,
         since=timestamp_since,
-        to=timestamp_to
+        to=timestamp_to,
+        should_refresh_on_new_data=should_refresh_on_new_data,
+        last_data_timestamp=datetimes[0],
     )
+
+
+@servers.route("/server/<id>/check")
+@login_required
+def server_details_changed(id: int):
+    server = Server.query.get(id)
+    last_data_timestamp = request.args.get('last_data_timestamp', default=None)
+    if last_data_timestamp is None:
+        return '', 400
+    else:
+        last_data_timestamp = datetime.strptime(last_data_timestamp, DATETIME_FORMAT)
+    
+    latest_server_data = (ServerData
+        .query
+        .filter_by(server_id=id)
+        .filter(ServerData.timestamp > last_data_timestamp)
+        .order_by(ServerData.timestamp.desc())
+        .limit(1)
+        .first()
+    )
+
+    resp = make_response("", 200)
+    if latest_server_data and latest_server_data.timestamp > last_data_timestamp:
+        resp.headers["HX-Trigger"] = "newServerData"
+    return resp

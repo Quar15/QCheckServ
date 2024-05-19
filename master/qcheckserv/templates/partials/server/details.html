@@ -1,6 +1,15 @@
-<div class="info">
+<div class="info" hx-get="{{ url_for('servers.server_details', id=server.id) }}" hx-target="#wrapper" hx-trigger="newServerData[isDataLive()]">
     <h2>{{ server.hostname }}</h2>
     <div class="filters">
+        {% if should_refresh_on_new_data %}
+            <div id="is-data-live-toggle" is-data-live="true" hx-get="{{ url_for('servers.server_details_changed', id=server.id, last_data_timestamp=last_data_timestamp) }}" hx-trigger="every 60s" hx-swap="none">
+                <a href="#" class="active" hx-get="{{ url_for('servers.server_details', id=server.id) }}" hx-target="#wrapper" hx-swap="innerHTML">Live</a>
+            </div>
+        {% else %}
+            <div id="is-data-live-toggle" hx-get="{{ url_for('servers.server_details_changed', id=server.id, last_data_timestamp=last_data_timestamp) }}" hx-trigger="every 60s" hx-swap="none">
+                <a href="#" hx-get="{{ url_for('servers.server_details', id=server.id) }}" hx-target="#wrapper" hx-swap="innerHTML">Live</a>
+            </div>
+        {% endif %}
         <div class="filter-list" id="filter-list">
             <a href="#" hx-get="{{ url_for('servers.server_details', id=server.id) }}" hx-target="#wrapper">3h</a>
             <a href="#" hx-get="{{ url_for('servers.server_details', id=server.id) }}" hx-target="#wrapper">6h</a>
@@ -90,7 +99,6 @@
     </table>
 </div>
 </div>
-
 <script>
     var labels = {{ labels | safe }};
     var valuesCpu = {{ server_data_response.values_cpu | safe }};

@@ -209,3 +209,11 @@ function hideOnClick(selector) {
         })
     });
 }
+
+function isDataLive() {
+    let isDataLiveToggle = document.querySelector("#is-data-live-toggle");
+    if (isDataLiveToggle.getAttribute("is-data-live") === "true") {
+        return true;
+    }
+    return false;
+}
