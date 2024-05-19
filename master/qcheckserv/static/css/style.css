@@ -57,6 +57,10 @@ nav .logo {
     margin: 20px auto;
 }
 
+nav .logo img {
+    width: 100%;
+}
+
 nav .menu {
     display: flex;
     flex-direction: column;
