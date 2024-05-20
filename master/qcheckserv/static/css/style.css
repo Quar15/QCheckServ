@@ -381,6 +381,10 @@ nav .menu a .tag {
     transition: grid-template-rows .4s ease-in-out;
 }
 
+.list-group .item-content .buttons {
+    padding: 30px 0 5px 5px;
+}
+
 .list-group.active .item-content {
     grid-template-rows: 1fr;
 }

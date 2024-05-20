@@ -1,13 +1,79 @@
 <div class="item-groups">
     <div class="list-group">
         <div class="item-header">
+            <h2>Alert Triggers</h2>
+            <div class="icon">+</div>
+        </div>
+        <div class="item-content">
+            <div class="table-wrapper">
+                {% if current_user.role == 1 %}
+                    <div class="buttons">
+                        <a class="btn" href="{{ url_for('alerts.alert_trigger_create') }}">Create new alert trigger</a>
+                    </div>
+                {% endif %}
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th></th>
+                    </tr>
+                    {% for alert_trigger in alert_triggers %}
+                        <tr>
+                            <td>alert_trigger.id</td>
+                            <td>
+                                {% if current_user.role == 1 %}
+                                    <a href="{{ url_for('alerts.alert_trigger_edit', id=alert_trigger.id) }}"><i class='bx bx-edit-alt'></i></a>
+                                    <i class='bx bxs-trash' hx-get="{{ url_for('alerts.alert_trigger_delete', id=alert_trigger.id) }}" hx-target="#wrapper" hx-confirm="Delete alert trigger?"></i>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="list-group">
+        <div class="item-header">
+            <h2>Alert Notifications</h2>
+            <div class="icon">+</div>
+        </div>
+        <div class="item-content">
+            <div class="table-wrapper">
+                {% if current_user.role == 1 %}
+                    <div class="buttons">
+                        <a class="btn" href="{{ url_for('alerts.alert_notification_create') }}">Create new alert notification</a>
+                    </div>
+                {% endif %}
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th></th>
+                    </tr>
+                    {% for alert_notification in alert_notifications %}
+                        <tr>
+                            <td>alert_notification.id</td>
+                            <td>
+                                {% if current_user.role == 1 %}
+                                    <a href="{{ url_for('alerts.alert_notification_edit', id=alert_notification.id) }}"><i class='bx bx-edit-alt'></i></a>
+                                    <i class='bx bxs-trash' hx-get="{{ url_for('alerts.alert_notification_delete', id=alert_notification.id) }}" hx-target="#wrapper" hx-confirm="Delete alert notification?"></i>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="list-group">
+        <div class="item-header">
             <h2>Alert Definitions</h2>
             <div class="icon">+</div>
         </div>
         <div class="item-content">
             <div class="table-wrapper">
                 {% if current_user.role == 1 %}
-                    <a class="btn" href="{{ url_for('alerts.alert_definition_create') }}">Create new alert definition</a>
+                    <div class="buttons">
+                        <a class="btn" href="{{ url_for('alerts.alert_definition_create') }}">Create new alert definition</a>
+                    </div>
                 {% endif %}
                 <table>
                     <tr>

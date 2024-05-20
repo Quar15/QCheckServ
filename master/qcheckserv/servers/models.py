@@ -13,6 +13,7 @@ class Server(db.Model):
         backref='servers',
         lazy=True
     )
+    alerts = db.relationship('Alert', backref='server', lazy=True)
     
     def get_last_data(self) -> 'ServerData':
         return ServerData.query.filter_by(server_id=self.id).order_by(ServerData.timestamp.desc()).first()

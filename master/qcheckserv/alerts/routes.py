@@ -38,3 +38,45 @@ def alert_definition_edit():
 @admin_required
 def alert_definition_delete():
     return redirect(url_for('alerts.alerts_list'))
+
+
+@alerts.route("/alert/notification/create")
+@login_required
+@admin_required
+def alert_notification_create():
+    return render_template('alerts/create_notification.html')
+
+
+@alerts.route("/alert/notification/edit")
+@login_required
+@admin_required
+def alert_notification_edit():
+    return render_template('alerts/create_notification.html')
+
+
+@alerts.route("/alert/notification/delete")
+@login_required
+@admin_required
+def alert_notification_delete():
+    return redirect(url_for('alerts.alerts_list'))
+
+
+@alerts.route("/alert/trigger/create")
+@login_required
+@admin_required
+def alert_trigger_create():
+    return render_template('alerts/create_trigger.html')
+
+
+@alerts.route("/alert/trigger/edit")
+@login_required
+@admin_required
+def alert_trigger_edit():
+    return render_template('alerts/create_trigger.html')
+
+
+@alerts.route("/alert/trigger/delete")
+@login_required
+@admin_required
+def alert_trigger_delete():
+    return redirect(url_for('alerts.alerts_list'))

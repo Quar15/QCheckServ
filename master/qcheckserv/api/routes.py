@@ -3,6 +3,7 @@ import json
 from datetime import datetime
 from qcheckserv import db
 from qcheckserv.servers.models import Server, ServerData
+from qcheckserv.alerts.models import AlertDefinition
 
 
 api = Blueprint('api', __name__)
@@ -64,3 +65,13 @@ def gather_server_data():
     db.session.commit()
 
     return json.dumps(data), 200
+
+
+@api.route('/api/alert/triggered')
+def get_alerts():
+    alert_definitions = AlertDefinition.query.all()
+    triggered_alerts = []
+    for alert_definition in alert_definitions:
+        if (alert_definition.is_triggered()):
+            triggered_alerts.append(f"{alert_definition}")
+    return json.dumps(triggered_alerts)
