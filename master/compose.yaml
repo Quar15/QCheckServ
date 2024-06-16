@@ -1,0 +1,9 @@
+version: '3'
+services:
+  qcheckserv:
+    container_name: qcheckserv-master
+    restart: always
+    env_file: .env
+    build: .
+    ports:
+      - "7010:7010"
