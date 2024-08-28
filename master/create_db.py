@@ -1,4 +1,4 @@
-from qcheckserv.servers.models import ServerServerGroupHelper, Server, ServerData, ServerGroup
+from qcheckserv.servers.models import ServerServerGroupHelper, Server, ServerData, ServerGroup, LatestServerData
 from qcheckserv.users.models import User
 from qcheckserv import create_app, db
 

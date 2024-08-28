@@ -2,7 +2,7 @@ from flask import url_for, request, Blueprint
 import json
 from datetime import datetime
 from qcheckserv import db
-from qcheckserv.servers.models import Server, ServerData
+from qcheckserv.servers.models import Server, ServerData, LatestServerData
 
 
 api = Blueprint('api', __name__)
@@ -61,6 +61,21 @@ def gather_server_data():
         server_id = server.id
     )
     db.session.add(server_data)
+    db.session.commit()
+
+    latest_server_data = LatestServerData.query.filter_by(server_id=server.id).first()
+    if not latest_server_data:
+        latest_server_data = LatestServerData()
+    latest_server_data.timestamp = datetime.strptime(data[TIMESTAMP], DATETIME_FORMAT)
+    latest_server_data.cpu_perc = data[CPU_PERC]
+    latest_server_data.loadavg = data[LOADAVG]
+    latest_server_data.mem_perc = data[MEM_PERC]
+    latest_server_data.partitions = data[PARTITIONS]
+    latest_server_data.bytes_received = data[BYTES_RECEIVED]
+    latest_server_data.bytes_sent = data[BYTES_SENT]
+    latest_server_data.server_id = server.id
+
+    db.session.add(latest_server_data)
     db.session.commit()
 
     return json.dumps(data), 200
